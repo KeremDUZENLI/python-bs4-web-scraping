@@ -1,8 +1,7 @@
 import csv
-from collections import Counter
 
-csv_file_name = "results_copy.csv"
-output_csv_file = "results_common_words_copy.csv"
+csv_file_name = "results.csv"
+output_csv_file = "results_common.csv"
 
 website_words = {}
 with open(csv_file_name, mode='r', encoding='utf-8') as csv_file:

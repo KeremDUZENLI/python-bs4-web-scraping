@@ -1,8 +1,5 @@
 import requests
-import numpy as np
-from PIL import Image
 from bs4 import BeautifulSoup
-from wordcloud import WordCloud
 from collections import Counter
 import nltk
 from nltk.corpus import stopwords
