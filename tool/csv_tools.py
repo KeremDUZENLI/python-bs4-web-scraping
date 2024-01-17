@@ -1,5 +1,5 @@
 import csv
-from web_translator import words_translate_deepl
+from web.web_translator import words_translate_deepl
 
 
 def create_csv_words_frequency(common_words_list, output_csv):

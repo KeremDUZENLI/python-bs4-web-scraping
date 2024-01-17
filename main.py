@@ -1,10 +1,11 @@
-from web_scrape import scrape_website_get_frequent_words
-from csv_tools import create_csv_words_frequency, create_csv_words_translated, create_csv_words_common, read_csv_each_website
-from dotenv import load_dotenv
-import os
+from tool.directory import setup_directory_csv, setup_env
+from web.web_scrape import scrape_website_get_frequent_words
+from tool.csv_tools import create_csv_words_frequency, create_csv_words_translated, create_csv_words_common, read_csv_each_website
 
-load_dotenv()
-deepl_auth_key = os.getenv('DEEPL_KEY')
+
+setup_directory_csv("csv")
+deepl_auth_key = setup_env()
+
 target_language_1 = 'EN-GB'
 target_language_2 = 'DE'
 
