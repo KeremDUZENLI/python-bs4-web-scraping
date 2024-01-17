@@ -9,7 +9,7 @@ This project involves web scraping multiple websites using BeautifulSoup (bs4) t
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your_username/python-bs4-web-scraping.git
+   git clone https://github.com/KeremDUZENLI/python-bs4-web-scraping.git
    ```
 
 2. Navigate to the project directory:
@@ -64,5 +64,3 @@ This project involves web scraping multiple websites using BeautifulSoup (bs4) t
 - `bs4` (Beautiful Soup): For parsing HTML content.
 - `nltk` (Natural Language Toolkit): For natural language processing tasks.
 - `deepl`: For translating text using Deepl API.
-
-Feel free to explore the code and adapt it to your needs! If you have any questions or suggestions, please don't hesitate to reach out.
