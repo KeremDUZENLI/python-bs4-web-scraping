@@ -10,11 +10,11 @@ def create_csv_words_frequency(common_words_list, output_csv):
 
         for common_words in common_words_list:
             website_url = common_words['WEB Adress']
-            top_20_words = common_words['Top 20 Words']
+            top_words = common_words['Top Words']
 
             writer.writerow(['WEB Adress', website_url])
 
-            for word, freq in top_20_words:
+            for word, freq in top_words:
                 writer.writerow([word, freq])
 
             writer.writerow([])

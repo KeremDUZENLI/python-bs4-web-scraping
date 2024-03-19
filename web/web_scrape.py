@@ -10,7 +10,7 @@ nltk.download('stopwords')
 nltk.download('punkt')
 
 
-def scrape_website_get_frequent_words(website_url):
+def scrape_website_get_frequent_words(website_url, top_frequency):
     html_content = requests.get(website_url).text
     website_text = BeautifulSoup(html_content, 'html.parser').get_text()
 
@@ -27,8 +27,9 @@ def scrape_website_get_frequent_words(website_url):
         website_text) if word.lower() not in stop_words and not any(char.isdigit() for char in word) and len(word) > 2 and len(word) < 30])
 
     word_freq = Counter(filtered_text.split())
-    top_20_words = word_freq.most_common(20)
+    top_words = word_freq.most_common(top_frequency)
 
     common_words_dict = {'WEB Adress': website_url,
-                         'Top 20 Words': top_20_words}
+                         'Top Words': top_words}
+
     return common_words_dict
