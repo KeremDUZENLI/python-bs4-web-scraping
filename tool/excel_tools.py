@@ -43,12 +43,13 @@ def create_excel_words_translated(input_excel, output_excel, target_language, de
 def create_excel_words_common(input_excel, output_excel):
     website_words_dict = read_excel_each_website(input_excel)
 
-    common_words_tracker = {word: set() for word in set.union(
-        *map(set, website_words_dict.values()))}
+    common_words_tracker = {}
 
     for website, words in website_words_dict.items():
         for word, freq in words:
-            common_words_tracker[word].add((website, freq))
+            if word not in common_words_tracker:
+                common_words_tracker[word] = []
+            common_words_tracker[word].append((website, freq))
 
     common_words_between_websites = {
         word: websites for word, websites in common_words_tracker.items() if len(websites) >= 2}
@@ -56,14 +57,15 @@ def create_excel_words_common(input_excel, output_excel):
     sorted_common_words = sorted(common_words_between_websites.items(),
                                  key=lambda x: (len(x[1]), max(x[1], key=lambda y: y[1])[1], x[0]), reverse=True)
 
-    df = pd.DataFrame(columns=['Common Word', 'Total Frequency', 'Websites'])
+    rows = []
     for word, websites_freq in sorted_common_words:
         websites = ', '.join(
             sorted([f"{site} ({freq})" for site, freq in websites_freq]))
         total_frequency = sum(freq for _, freq in websites_freq)
-        df = df.append({'Common Word': word, 'Total Frequency': total_frequency,
-                       'Websites': websites}, ignore_index=True)
+        rows.append(
+            {'Common Word': word, 'Total Frequency': total_frequency, 'Websites': websites})
 
+    df = pd.DataFrame(rows)
     df.to_excel(output_excel, index=False)
 
 
