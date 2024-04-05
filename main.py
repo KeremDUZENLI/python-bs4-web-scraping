@@ -12,9 +12,9 @@ from web.web_translator import create_all_websites_frequent_words_dict_translate
 
 
 class WebsiteAnalyzer:
-    def __init__(self):
+    def __init__(self, top_frequency=5):
+        self.top_frequency = top_frequency
         self.deepl_auth_key = setup_env()
-        self.top_frequency = 20
 
         # self.website_urls = read_website_urls_from_excel("input/websites.xlsx")
         self.website_urls = read_website_urls_from_example
@@ -85,55 +85,69 @@ class WebsiteAnalyzer:
         self.all_websites_frequent_words_dict_translated_en = read_all_websites_frequent_words_dict_from_txt(
             self.all_websites_frequent_words_dict_translated_txt_en)
 
-    def frequent_words_anylanguage(self):
-        create_all_websites_frequent_words_dict_to_csv(
-            self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_csv)
-        create_all_websites_frequent_words_dict_to_excel(
-            self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_xlsx, "seperated")
+    def frequent_words_anylanguage(self, type="BOTH"):
+        if type in ["CSV", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_csv(
+                self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_csv)
 
-    def common_words_anylanguage(self):
-        create_common_words_among_websites_dict_to_csv(
-            self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_csv)
-        create_common_words_among_websites_dict_to_excel(
-            self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_xlsx)
+        if type in ["EXCEL", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_excel(
+                self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_xlsx, "seperated")
 
-    def frequent_words_de(self):
-        create_all_websites_frequent_words_dict_to_csv(
-            self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_csv_de)
-        create_all_websites_frequent_words_dict_to_excel(
-            self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_xlsx_de)
+    def common_words_anylanguage(self, type="BOTH"):
+        if type in ["CSV", "BOTH"]:
+            create_common_words_among_websites_dict_to_csv(
+                self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_csv)
 
-    def common_words_de(self):
-        create_common_words_among_websites_dict_to_csv(
-            self.all_websites_frequent_words_dict_translated_de, self.common_words_among_websites_dict_translated_csv_de)
-        create_common_words_among_websites_dict_to_excel(
-            self.all_websites_frequent_words_dict_translated_de, self.common_words_among_websites_dict_translated_xlsx_de)
+        if type in ["EXCEL", "BOTH"]:
+            create_common_words_among_websites_dict_to_excel(
+                self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_xlsx)
 
-    def frequent_words_en(self):
-        create_all_websites_frequent_words_dict_to_csv(
-            self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_csv_en)
-        create_all_websites_frequent_words_dict_to_excel(
-            self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_xlsx_en)
+    def frequent_words_de(self, type="BOTH"):
+        if type in ["CSV", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_csv(
+                self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_csv_de)
+        if type in ["EXCEL", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_excel(
+                self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_xlsx_de)
 
-    def common_words_en(self):
-        create_common_words_among_websites_dict_to_csv(
-            self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_csv_en)
-        create_common_words_among_websites_dict_to_excel(
-            self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_xlsx_en)
+    def common_words_de(self, type="BOTH"):
+        if type in ["CSV", "BOTH"]:
+            create_common_words_among_websites_dict_to_csv(
+                self.all_websites_frequent_words_dict_translated_de, self.common_words_among_websites_dict_translated_csv_de)
+        if type in ["EXCEL", "BOTH"]:
+            create_common_words_among_websites_dict_to_excel(
+                self.all_websites_frequent_words_dict_translated_de, self.common_words_among_websites_dict_translated_xlsx_de)
+
+    def frequent_words_en(self, type="BOTH"):
+        if type in ["CSV", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_csv(
+                self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_csv_en)
+        if type in ["EXCEL", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_excel(
+                self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_xlsx_en)
+
+    def common_words_en(self, type="BOTH"):
+        if type in ["CSV", "BOTH"]:
+            create_common_words_among_websites_dict_to_csv(
+                self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_csv_en)
+        if type in ["EXCEL", "BOTH"]:
+            create_common_words_among_websites_dict_to_excel(
+                self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_xlsx_en)
 
 
-analyzer = WebsiteAnalyzer()
+analyzer = WebsiteAnalyzer(2)
 
-# analyzer.analyze_websites_translate_create_dict("BOTH")
-# analyzer.create_frequent_words_dict_to_txt()
+analyzer.analyze_websites_translate_create_dict("BOTH")
+analyzer.create_frequent_words_dict_to_txt()
 
-analyzer.read_frequent_words_from_txt()
+# analyzer.read_frequent_words_from_txt()
 
-analyzer.frequent_words_anylanguage()
-analyzer.common_words_anylanguage()
+analyzer.frequent_words_anylanguage("CSV")
+analyzer.common_words_anylanguage("CSV")
 
-analyzer.frequent_words_de()
-analyzer.common_words_de()
+analyzer.frequent_words_de("CSV")
+analyzer.common_words_de("CSV")
 
-analyzer.frequent_words_en()
-analyzer.common_words_en()
+analyzer.frequent_words_en("CSV")
+analyzer.common_words_en("CSV")
