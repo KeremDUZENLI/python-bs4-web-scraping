@@ -1,0 +1,1 @@
+[{'WEB Adress': 'https://röda.at/der-verein/', 'Top Words': [('Technical', 7), ('Storage', 6), ('Cultural association', 4)]}, {'WEB Adress': 'http://www.grgr.at/', 'Top Words': [('Gregory', 20), ('Work', 11), ('Göttfert', 10)]}]

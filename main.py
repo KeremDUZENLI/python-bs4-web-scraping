@@ -24,43 +24,25 @@ def my_decorator(folder_name):
 
 class WebsiteAnalyzer:
     directory_out = "output"
-    directory_txt = "txt"
+    directory_frequent = "frequent_words"
+    directory_common = "common_words"
     directory_csv = "csv"
     directory_xls = "excel"
-    directory_common = "common_words"
 
-    def __init__(self, top_frequency=5):
+    def __init__(self, top_frequency=5, languages=None, output_type=None):
         self.top_frequency = top_frequency
-        self.deepl_auth_key = setup_env()
+        self.languages = languages
+        self.output_type = output_type
 
+        xls_version = ["seperated", "concatenated"]
+        self.xls_version_choice = xls_version[0]
+
+        self.deepl_auth_key = setup_env()
         self.target_language_1 = 'DE'
         self.target_language_2 = 'EN-GB'
 
-        self.set_dictionaries("websites", "EN")
         self.set_output_files()
-
-    def set_dictionaries(self, mock=None, language=None):
-        self.all_websites_frequent_words_dict = []
-        self.all_websites_frequent_words_dict_translated_de = []
-        self.all_websites_frequent_words_dict_translated_en = []
-        self.website_urls = read_website_urls_from_excel("input/websites.xlsx")
-
-        if mock == "frequency":
-            self.all_websites_frequent_words_dict = all_websites_frequent_words_dict_example
-            self.all_websites_frequent_words_dict_translated_de = all_websites_frequent_words_dict_translated_de_example
-            self.all_websites_frequent_words_dict_translated_en = all_websites_frequent_words_dict_translated_en_example
-            return
-
-        if mock == "commons":
-            self.all_websites_frequent_words_dict = common_words_among_websites_dict_example
-            self.all_websites_frequent_words_dict_translated_de = common_words_among_websites_dict_translated_de_example
-            self.all_websites_frequent_words_dict_translated_en = common_words_among_websites_dict_translated_en_example
-            return
-
-        if mock == "websites":
-            self.website_urls = read_website_urls_from_example
-
-        return self.analyze_websites_translate_create_dict(language)
+        self.set_dictionaries("mock_websites")
 
     def set_output_files(self):
         setup_output_directory(self.directory_out)
@@ -83,89 +65,141 @@ class WebsiteAnalyzer:
         self.common_words_among_websites_dict_translated_csv_en = "common_words_among_websites_dict_translated_en.csv"
         self.common_words_among_websites_dict_translated_xlsx_en = "common_words_among_websites_dict_translated_en.xlsx"
 
-    def analyze_websites_translate_create_dict(self, language=None):
-        self.all_websites_frequent_words_dict = create_all_websites_frequent_words_dict(
-            self.website_urls, self.top_frequency)
+    def set_dictionaries(self, mock=None):
+        self.all_websites_frequent_words_dict = []
+        self.all_websites_frequent_words_dict_translated_de = []
+        self.all_websites_frequent_words_dict_translated_en = []
+        self.all_websites_url = []
 
-        if language in ["DE", "BOTH"]:
+        if mock == "mock_frequency":
+            self.all_websites_frequent_words_dict = all_websites_frequent_words_dict_example
+            self.all_websites_frequent_words_dict_translated_de = all_websites_frequent_words_dict_translated_de_example
+            self.all_websites_frequent_words_dict_translated_en = all_websites_frequent_words_dict_translated_en_example
+
+        if mock == "mock_commons":
+            self.all_websites_frequent_words_dict = common_words_among_websites_dict_example
+            self.all_websites_frequent_words_dict_translated_de = common_words_among_websites_dict_translated_de_example
+            self.all_websites_frequent_words_dict_translated_en = common_words_among_websites_dict_translated_en_example
+
+        if mock == "mock_txt":
+            self.read_frequent_words_from_txt()
+
+        if mock == "mock_websites":
+            self.all_websites_url = read_website_urls_from_example
+            self.analyze_websites_translate_create_dict()
+
+        else:
+            self.all_websites_url = read_website_urls_from_excel(
+                "input/websites.xlsx")
+            self.analyze_websites_translate_create_dict()
+
+        self.save_frequent_words_dict_as_txt()
+
+    def analyze_websites_translate_create_dict(self):
+        self.all_websites_frequent_words_dict = create_all_websites_frequent_words_dict(
+            self.all_websites_url, self.top_frequency)
+
+        if self.languages in ["DEUTSCH", "BOTH"]:
             self.all_websites_frequent_words_dict_translated_de = create_all_websites_frequent_words_dict_translated(
                 self.all_websites_frequent_words_dict, self.target_language_1, self.deepl_auth_key)
 
-        if language in ["EN", "BOTH"]:
+        if self.languages in ["ENGLISH", "BOTH"]:
             self.all_websites_frequent_words_dict_translated_en = create_all_websites_frequent_words_dict_translated(
                 self.all_websites_frequent_words_dict, self.target_language_2, self.deepl_auth_key)
 
-        return self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_en
-
-    @my_decorator(directory_txt)
-    def create_frequent_words_dict_to_txt(self):
+    def save_frequent_words_dict_as_txt(self):
         create_all_websites_frequent_words_dict_to_txt(
             self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_txt)
-        create_all_websites_frequent_words_dict_to_txt(
-            self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_txt_de)
-        create_all_websites_frequent_words_dict_to_txt(
-            self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_txt_en)
 
-    @my_decorator(directory_txt)
+        if self.languages in ["DEUTSCH", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_txt(
+                self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_txt_de)
+
+        if self.languages in ["ENGLISH", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_txt(
+                self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_txt_en)
+
     def read_frequent_words_from_txt(self):
         self.all_websites_frequent_words_dict = read_all_websites_frequent_words_dict_from_txt(
             self.all_websites_frequent_words_dict_txt)
-        self.all_websites_frequent_words_dict_translated_de = read_all_websites_frequent_words_dict_from_txt(
-            self.all_websites_frequent_words_dict_translated_txt_de)
-        self.all_websites_frequent_words_dict_translated_en = read_all_websites_frequent_words_dict_from_txt(
-            self.all_websites_frequent_words_dict_translated_txt_en)
+
+        if self.languages in ["DEUTSCH", "BOTH"]:
+            self.all_websites_frequent_words_dict_translated_de = read_all_websites_frequent_words_dict_from_txt(
+                self.all_websites_frequent_words_dict_translated_txt_de)
+
+        if self.languages in ["ENGLISH", "BOTH"]:
+            self.all_websites_frequent_words_dict_translated_en = read_all_websites_frequent_words_dict_from_txt(
+                self.all_websites_frequent_words_dict_translated_txt_en)
+
+    @my_decorator(directory_frequent)
+    def create_frequent_words(self):
+        if self.output_type in ["CSV", "BOTH"]:
+            self.create_frequent_words_dict_to_csv()
+
+        if self.output_type in ["EXCEL", "BOTH"]:
+            self.create_frequent_words_dict_to_xls()
 
     @my_decorator(directory_csv)
-    def create_dict_to_csv(self, language=None):
+    def create_frequent_words_dict_to_csv(self):
         create_all_websites_frequent_words_dict_to_csv(
             self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_csv)
 
-        if language in ["DE", "BOTH"]:
+        if self.languages in ["DEUTSCH", "BOTH"]:
             create_all_websites_frequent_words_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_csv_de)
 
-        if language in ["EN", "BOTH"]:
+        if self.languages in ["ENGLISH", "BOTH"]:
             create_all_websites_frequent_words_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_csv_en)
 
     @my_decorator(directory_xls)
-    def create_dict_to_excel(self, language=None, version="seperated"):
+    def create_frequent_words_dict_to_xls(self):
         create_all_websites_frequent_words_dict_to_excel(
-            self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_xlsx, version)
+            self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_xlsx, self.xls_version_choice)
 
-        if language in ["DE", "BOTH"]:
+        if self.languages in ["DEUTSCH", "BOTH"]:
             create_all_websites_frequent_words_dict_to_excel(
-                self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_xlsx_de, version)
+                self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_xlsx_de, self.xls_version_choice)
 
-        if language in ["EN", "BOTH"]:
+        if self.languages in ["ENGLISH", "BOTH"]:
             create_all_websites_frequent_words_dict_to_excel(
-                self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_xlsx_en, version)
+                self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_xlsx_en, self.xls_version_choice)
 
     @my_decorator(directory_common)
-    def create_common_words_among_websites(self, output_type="BOTH"):
-        if output_type in ["CSV", "BOTH"]:
-            create_common_words_among_websites_dict_to_csv(
-                self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_csv)
+    def create_common_words(self):
+        if self.output_type in ["CSV", "BOTH"]:
+            self.create_common_words_dict_to_csv()
+
+        if self.output_type in ["EXCEL", "BOTH"]:
+            self.create_common_words_dict_to_xls()
+
+    @my_decorator(directory_csv)
+    def create_common_words_dict_to_csv(self):
+        create_common_words_among_websites_dict_to_csv(
+            self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_csv)
+
+        if self.languages in ["DEUTSCH", "BOTH"]:
             create_common_words_among_websites_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_de, self.common_words_among_websites_dict_translated_csv_de)
+
+        if self.languages in ["ENGLISH", "BOTH"]:
             create_common_words_among_websites_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_csv_en)
 
-        if output_type in ["EXCEL", "BOTH"]:
-            create_common_words_among_websites_dict_to_excel(
-                self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_xlsx)
+    @my_decorator(directory_xls)
+    def create_common_words_dict_to_xls(self):
+        create_common_words_among_websites_dict_to_excel(
+            self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_xlsx)
+
+        if self.languages in ["DEUTSCH", "BOTH"]:
             create_common_words_among_websites_dict_to_excel(
                 self.all_websites_frequent_words_dict_translated_de, self.common_words_among_websites_dict_translated_xlsx_de)
+
+        if self.languages in ["ENGLISH", "BOTH"]:
             create_common_words_among_websites_dict_to_excel(
                 self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_xlsx_en)
 
 
-analyzer = WebsiteAnalyzer(2)
-
-analyzer.create_frequent_words_dict_to_txt()
-# analyzer.read_frequent_words_from_txt()
-
-# analyzer.create_dict_to_csv("BOTH")
-# analyzer.create_dict_to_excel("BOTH")
-
-# analyzer.create_common_words_among_websites("CSV")
+analyzer = WebsiteAnalyzer(3, "BOTH", "BOTH")
+analyzer.create_frequent_words()
+analyzer.create_common_words()
