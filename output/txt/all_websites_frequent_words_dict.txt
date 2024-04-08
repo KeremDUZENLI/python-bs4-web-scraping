@@ -1,1 +1,1 @@
-[{'WEB Adress': 'https://www.fuckhead.at/', 'Top Words': [('Eat', 6), ('Immer', 6)]}, {'WEB Adress': 'http://www.interstellarrecords.at/index.php', 'Top Words': [('Interstellar', 54), ('Records', 52)]}, {'WEB Adress': 'https://kuprosauwald.org/', 'Top Words': [('Obernberg', 11), ('Gespeichert', 10)]}]
+[{'WEB Adress': 'https://röda.at/der-verein/', 'Top Words': [('Technische', 7), ('Speicherung', 6)]}, {'WEB Adress': 'http://www.grgr.at/', 'Top Words': [('Gregor', 20), ('Work', 11)]}]

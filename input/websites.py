@@ -1,10 +1,10 @@
 
 read_website_urls_from_example = [
-    "https://www.fuckhead.at/",
-    "http://www.interstellarrecords.at/index.php",
-    "https://kuprosauwald.org/",
-    # "https://röda.at/der-verein/",
-    # "http://www.grgr.at/",
+    # "https://www.fuckhead.at/",
+    # "http://www.interstellarrecords.at/index.php",
+    # "https://kuprosauwald.org/",
+    "https://röda.at/der-verein/",
+    "http://www.grgr.at/",
     # "https://www.grgr.at/aboutme/",
     # "https://qujochoe.org/about/",
     # "https://verenamayrhofer.at/",
