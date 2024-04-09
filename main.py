@@ -37,6 +37,8 @@ class WebsiteAnalyzer:
         self.xls_version_choice = xls_version[0]
 
         self.deepl_auth_key = setup_env()
+        self.directory_input = "input"
+        self.directory_output = "output"
         self.target_language_1 = 'DE'
         self.target_language_2 = 'EN-GB'
 
@@ -44,7 +46,7 @@ class WebsiteAnalyzer:
         self.set_dictionaries()
 
     def set_output_files(self):
-        setup_output_directory("output")
+        setup_output_directory(self.directory_output)
         self.all_websites_frequent_words_dict_txt = "all_websites_frequent_words_dict.txt"
         self.all_websites_frequent_words_dict_translated_txt_de = "all_websites_frequent_words_dict_translated_de.txt"
         self.all_websites_frequent_words_dict_translated_txt_en = "all_websites_frequent_words_dict_translated_en.txt"
@@ -101,14 +103,9 @@ class WebsiteAnalyzer:
         self.all_websites_url = read_website_urls_from_example
         self.analyze_websites_translate_create_dict()
 
-    # def load_websites_from_excel(self):
-    #     self.all_websites_url = read_website_urls_from_excel(
-    #         "input/websites.xlsx")
-    #     self.analyze_websites_translate_create_dict()
-
     def load_websites_from_excel(self):
         excel_path = os.path.join(os.path.dirname(
-            os.path.abspath(__file__)), "input", "websites.xlsx")
+            os.path.abspath(__file__)), self.directory_input, "websites.xlsx")
         self.all_websites_url = read_website_urls_from_excel(excel_path)
         self.analyze_websites_translate_create_dict()
 
