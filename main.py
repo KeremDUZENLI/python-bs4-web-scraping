@@ -23,7 +23,6 @@ def my_decorator(folder_name):
 
 
 class WebsiteAnalyzer:
-    directory_out = "output"
     directory_frequent = "frequent_words"
     directory_common = "common_words"
     directory_csv = "csv"
@@ -42,11 +41,10 @@ class WebsiteAnalyzer:
         self.target_language_2 = 'EN-GB'
 
         self.set_output_files()
-        self.set_dictionaries("mock_websites")
+        self.set_dictionaries()
 
     def set_output_files(self):
-        setup_output_directory(self.directory_out)
-
+        setup_output_directory("output")
         self.all_websites_frequent_words_dict_txt = "all_websites_frequent_words_dict.txt"
         self.all_websites_frequent_words_dict_translated_txt_de = "all_websites_frequent_words_dict_translated_de.txt"
         self.all_websites_frequent_words_dict_translated_txt_en = "all_websites_frequent_words_dict_translated_en.txt"
@@ -71,29 +69,48 @@ class WebsiteAnalyzer:
         self.all_websites_frequent_words_dict_translated_en = []
         self.all_websites_url = []
 
-        if mock == "mock_frequency":
-            self.all_websites_frequent_words_dict = all_websites_frequent_words_dict_example
-            self.all_websites_frequent_words_dict_translated_de = all_websites_frequent_words_dict_translated_de_example
-            self.all_websites_frequent_words_dict_translated_en = all_websites_frequent_words_dict_translated_en_example
+        mock_actions = {
+            "mock_frequency": self.load_frequency_mock,
+            "mock_commons": self.load_commons_mock,
+            "mock_txt": self.load_txt_mock,
+            "mock_websites": self.load_websites_mock,
+        }
 
-        if mock == "mock_commons":
-            self.all_websites_frequent_words_dict = common_words_among_websites_dict_example
-            self.all_websites_frequent_words_dict_translated_de = common_words_among_websites_dict_translated_de_example
-            self.all_websites_frequent_words_dict_translated_en = common_words_among_websites_dict_translated_en_example
-
-        if mock == "mock_txt":
-            self.read_frequent_words_from_txt()
-
-        if mock == "mock_websites":
-            self.all_websites_url = read_website_urls_from_example
-            self.analyze_websites_translate_create_dict()
-
+        action = mock_actions.get(mock)
+        if action:
+            action()
         else:
-            self.all_websites_url = read_website_urls_from_excel(
-                "input/websites.xlsx")
-            self.analyze_websites_translate_create_dict()
+            self.load_websites_from_excel()
 
         self.save_frequent_words_dict_as_txt()
+
+    def load_frequency_mock(self):
+        self.all_websites_frequent_words_dict = all_websites_frequent_words_dict_example
+        self.all_websites_frequent_words_dict_translated_de = all_websites_frequent_words_dict_translated_de_example
+        self.all_websites_frequent_words_dict_translated_en = all_websites_frequent_words_dict_translated_en_example
+
+    def load_commons_mock(self):
+        self.all_websites_frequent_words_dict = common_words_among_websites_dict_example
+        self.all_websites_frequent_words_dict_translated_de = common_words_among_websites_dict_translated_de_example
+        self.all_websites_frequent_words_dict_translated_en = common_words_among_websites_dict_translated_en_example
+
+    def load_txt_mock(self):
+        self.read_frequent_words_from_txt()
+
+    def load_websites_mock(self):
+        self.all_websites_url = read_website_urls_from_example
+        self.analyze_websites_translate_create_dict()
+
+    # def load_websites_from_excel(self):
+    #     self.all_websites_url = read_website_urls_from_excel(
+    #         "input/websites.xlsx")
+    #     self.analyze_websites_translate_create_dict()
+
+    def load_websites_from_excel(self):
+        excel_path = os.path.join(os.path.dirname(
+            os.path.abspath(__file__)), "input", "websites.xlsx")
+        self.all_websites_url = read_website_urls_from_excel(excel_path)
+        self.analyze_websites_translate_create_dict()
 
     def analyze_websites_translate_create_dict(self):
         self.all_websites_frequent_words_dict = create_all_websites_frequent_words_dict(
@@ -200,6 +217,6 @@ class WebsiteAnalyzer:
                 self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_xlsx_en)
 
 
-analyzer = WebsiteAnalyzer(3, "BOTH", "BOTH")
+analyzer = WebsiteAnalyzer(1, "BOTH", "BOTH")
 analyzer.create_frequent_words()
 analyzer.create_common_words()
