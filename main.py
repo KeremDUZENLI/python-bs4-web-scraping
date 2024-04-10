@@ -3,7 +3,7 @@ from main_setup import WebsiteAnalyzer
 
 def main():
     analyzer = WebsiteAnalyzer(
-        top_frequency=1, languages="BOTH", output_type="BOTH")
+        top_frequency=1, languages="BOTH", output_type="BOTH", act="read_excel")
 
     analyzer.create_frequent_words()
     analyzer.create_common_words()

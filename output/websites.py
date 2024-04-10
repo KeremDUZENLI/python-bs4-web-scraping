@@ -1,4 +1,4 @@
-read_website_urls_from_example = [
+website_urls_example = [
     # "https://www.fuckhead.at/",
     # "http://www.interstellarrecords.at/index.php",
     # "https://kuprosauwald.org/",

@@ -1,23 +1,12 @@
-import os
-
 from mock.mocking import LoadMock
 
-from setup.env import load_websites_from_excel, setup_env, setup_output_directory
+from setup.env import setup_env, setup_output_directory, my_decorator
 
 from tool.tool_csv import create_all_websites_frequent_words_dict_to_csv, create_common_words_among_websites_dict_to_csv
-from tool.tool_excel import create_all_websites_frequent_words_dict_to_excel, create_common_words_among_websites_dict_to_excel, read_website_urls_from_excel
-from tool.tool_print import print_elements_list, print_elements_dict
+from tool.tool_excel import create_all_websites_frequent_words_dict_to_excel, create_common_words_among_websites_dict_to_excel
 from tool.tool_txt import save_frequent_words_dict_as_txt, read_frequent_words_from_txt
 
-
-def my_decorator(folder_name):
-    def decorator(func):
-        def wrapper(self, *args, **kwargs):
-            setup_output_directory(folder_name)
-            func(self, *args, **kwargs)
-            os.chdir("../")
-        return wrapper
-    return decorator
+from web.web_scrape import create_frequent_words_from_example, create_frequent_words_from_excel
 
 
 class WebsiteAnalyzer:
@@ -26,10 +15,11 @@ class WebsiteAnalyzer:
     directory_csv = "csv"
     directory_xls = "excel"
 
-    def __init__(self, top_frequency=5, languages=None, output_type=None):
+    def __init__(self, top_frequency=5, languages=None, output_type=None, act=None):
         self.top_frequency = top_frequency
         self.languages = languages
         self.output_type = output_type
+        self.act = act
 
         xls_version = ["seperated", "concatenated"]
         self.xls_version_choice = xls_version[0]
@@ -42,7 +32,7 @@ class WebsiteAnalyzer:
 
         setup = Setup
         setup.set_output_files(self)
-        setup.set_dictionaries(self, "mock_txt")
+        setup.set_dictionaries(self, act)
 
     @my_decorator(directory_frequent)
     def create_frequent_words(self):
@@ -51,6 +41,14 @@ class WebsiteAnalyzer:
 
         if self.output_type in ["EXCEL", "BOTH"]:
             self.create_frequent_words_dict_to_xls()
+
+    @my_decorator(directory_common)
+    def create_common_words(self):
+        if self.output_type in ["CSV", "BOTH"]:
+            self.create_common_words_dict_to_csv()
+
+        if self.output_type in ["EXCEL", "BOTH"]:
+            self.create_common_words_dict_to_xls()
 
     @my_decorator(directory_csv)
     def create_frequent_words_dict_to_csv(self):
@@ -65,27 +63,6 @@ class WebsiteAnalyzer:
             create_all_websites_frequent_words_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_csv_en)
 
-    @my_decorator(directory_xls)
-    def create_frequent_words_dict_to_xls(self):
-        create_all_websites_frequent_words_dict_to_excel(
-            self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_xlsx, self.xls_version_choice)
-
-        if self.languages in ["DEUTSCH", "BOTH"]:
-            create_all_websites_frequent_words_dict_to_excel(
-                self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_xlsx_de, self.xls_version_choice)
-
-        if self.languages in ["ENGLISH", "BOTH"]:
-            create_all_websites_frequent_words_dict_to_excel(
-                self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_xlsx_en, self.xls_version_choice)
-
-    @my_decorator(directory_common)
-    def create_common_words(self):
-        if self.output_type in ["CSV", "BOTH"]:
-            self.create_common_words_dict_to_csv()
-
-        if self.output_type in ["EXCEL", "BOTH"]:
-            self.create_common_words_dict_to_xls()
-
     @my_decorator(directory_csv)
     def create_common_words_dict_to_csv(self):
         create_common_words_among_websites_dict_to_csv(
@@ -98,6 +75,19 @@ class WebsiteAnalyzer:
         if self.languages in ["ENGLISH", "BOTH"]:
             create_common_words_among_websites_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_csv_en)
+
+    @my_decorator(directory_xls)
+    def create_frequent_words_dict_to_xls(self):
+        create_all_websites_frequent_words_dict_to_excel(
+            self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_xlsx, self.xls_version_choice)
+
+        if self.languages in ["DEUTSCH", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_excel(
+                self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_xlsx_de, self.xls_version_choice)
+
+        if self.languages in ["ENGLISH", "BOTH"]:
+            create_all_websites_frequent_words_dict_to_excel(
+                self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_xlsx_en, self.xls_version_choice)
 
     @my_decorator(directory_xls)
     def create_common_words_dict_to_xls(self):
@@ -134,24 +124,24 @@ class Setup:
         class_instance.common_words_among_websites_dict_translated_csv_en = "common_words_among_websites_dict_translated_en.csv"
         class_instance.common_words_among_websites_dict_translated_xlsx_en = "common_words_among_websites_dict_translated_en.xlsx"
 
-    def set_dictionaries(class_instance, mock=None):
+    def set_dictionaries(class_instance, act=None):
         loadMock = LoadMock
         class_instance.all_websites_frequent_words_dict = []
         class_instance.all_websites_frequent_words_dict_translated_de = []
         class_instance.all_websites_frequent_words_dict_translated_en = []
         class_instance.all_websites_url = []
 
-        mock_actions = {
+        actions = {
             "mock_commons": loadMock.load_commons_mock,
             "mock_frequency": loadMock.load_frequency_mock,
-            "mock_websites": loadMock.load_websites_mock,
-            "mock_txt": read_frequent_words_from_txt,
+
+            "read_txt": read_frequent_words_from_txt,
+
+            "mock_websites": create_frequent_words_from_example,
+            "read_excel": create_frequent_words_from_excel,
+
+            None: lambda x: None
         }
 
-        action = mock_actions.get(mock)
-        if action:
-            action(class_instance)
-        else:
-            load_websites_from_excel(class_instance)
-
+        actions.get(act)(class_instance)
         save_frequent_words_dict_as_txt(class_instance)
