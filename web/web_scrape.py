@@ -1,19 +1,18 @@
-import requests
-from bs4 import BeautifulSoup
-from collections import Counter
-import nltk
-from nltk.corpus import stopwords
-import string
+from web.web_tool import scrape_website_get_frequent_words
+from web.web_translate import translate_top_words
 
 
-nltk.download('stopwords')
-nltk.download('punkt')
+def analyze_websites_translate_create_dict(class_instance):
+    class_instance.all_websites_frequent_words_dict = create_all_websites_frequent_words_dict(
+        class_instance.all_websites_url, class_instance.top_frequency)
 
+    if class_instance.languages in ["DEUTSCH", "BOTH"]:
+        class_instance.all_websites_frequent_words_dict_translated_de = create_all_websites_frequent_words_dict_translated(
+            class_instance.all_websites_frequent_words_dict, class_instance.target_language_1, class_instance.deepl_auth_key)
 
-STOP_WORDS_GERMAN = set(stopwords.words('german'))
-STOP_WORDS_ENGLISH = set(stopwords.words('english'))
-DELETE_TEXT = ["\"", "//", "'", "*", "\n", "\t", "–", "“", "„", "€", "$",
-               "xml version='1.0' encoding='utf-8'?", "html", ""] + list(string.punctuation)
+    if class_instance.languages in ["ENGLISH", "BOTH"]:
+        class_instance.all_websites_frequent_words_dict_translated_en = create_all_websites_frequent_words_dict_translated(
+            class_instance.all_websites_frequent_words_dict, class_instance.target_language_2, class_instance.deepl_auth_key)
 
 
 def create_all_websites_frequent_words_dict(website_urls, top_frequency):
@@ -31,70 +30,20 @@ def create_all_websites_frequent_words_dict(website_urls, top_frequency):
     return all_websites_frequent_words_dict
 
 
-def scrape_website_get_frequent_words(website_url, top_frequency):
-    html_content = scrape_website_get_html_content(website_url)
-    if html_content is None:
-        return {'WEB Adress': website_url, 'Top Words': []}
+def create_all_websites_frequent_words_dict_translated(all_websites_frequent_words_dict, target_language, deepl_auth_key):
+    all_websites_frequent_words_dict_translated = []
 
-    website_text = clean_html_content(html_content)
-    filtered_text = filter_text(website_text)
-    top_words = get_top_words(filtered_text, top_frequency)
-    top_words_sorted = sorted(top_words, key=lambda x: (-x[1], x[0]))
+    for website_common_words_dict in all_websites_frequent_words_dict:
+        website_url = website_common_words_dict['WEB Adress']
+        top_words = website_common_words_dict['Top Words']
 
-    website_common_words_dict = {'WEB Adress': website_url,
-                                 'Top Words': top_words_sorted}
+        translated_top_words = translate_top_words(
+            top_words, target_language, deepl_auth_key)
+        translated_top_words_sorted = sorted(
+            translated_top_words, key=lambda x: (-x[1], x[0]))
 
-    return website_common_words_dict
+        all_websites_frequent_words_dict_translated.append(
+            {'WEB Adress': website_url,
+             'Top Words': translated_top_words_sorted})
 
-
-def scrape_website_get_html_content(website_url):
-    try:
-        html_content = requests.get(website_url).text
-        return html_content
-
-    except Exception as e:
-        print(f"\n ***{website_url}: {e}*** \n")
-        return None
-
-
-def clean_html_content(html_content):
-    if html_content is None:
-        return None
-
-    soup = BeautifulSoup(html_content, 'html.parser')
-    website_text = soup.get_text()
-
-    for text in DELETE_TEXT:
-        website_text = website_text.replace(text, "")
-
-    return website_text
-
-
-def filter_text(website_text):
-    if website_text is None:
-        return None
-
-    stop_words = STOP_WORDS_GERMAN.union(STOP_WORDS_ENGLISH)
-
-    tokenized_words = nltk.word_tokenize(website_text)
-    filtered_words = [word.capitalize() for word in tokenized_words
-                      if word.lower() not in stop_words
-                      and not any(char.isdigit() for char in word)
-                      and 2 < len(word) < 30]
-
-    cleaned_words = [word.strip(string.punctuation) for word in filtered_words]
-    filtered_text = ' '.join(cleaned_words)
-
-    return filtered_text
-
-
-def get_top_words(filtered_text, top_frequency):
-    if filtered_text is None:
-        return None
-
-    word_freq = Counter(filtered_text.split())
-    filtered_freq = {word: freq for word,
-                     freq in word_freq.items() if freq > 1}
-    top_words = Counter(filtered_freq).most_common(top_frequency)
-
-    return top_words
+    return all_websites_frequent_words_dict_translated

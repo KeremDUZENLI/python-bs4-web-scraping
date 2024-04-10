@@ -1,24 +1,3 @@
-
-read_website_urls_from_example = [
-    # "https://www.fuckhead.at/",
-    # "http://www.interstellarrecords.at/index.php",
-    # "https://kuprosauwald.org/",
-    "https://röda.at/der-verein/",
-    "http://www.grgr.at/",
-    # "https://www.grgr.at/aboutme/",
-    # "https://qujochoe.org/about/",
-    # "https://verenamayrhofer.at/",
-    # "http://hoerstadt.at/uber-uns/",
-    # "https://www.schlot.info/",
-    # "https://tinaleisch.at/index.php/tinaleisch/",
-    # "https://kunstraum.at/en/how-we-are/",
-    # "https://kunstraum.at/wer-wir-sind/",
-    # "https://www.kuva.at/",
-    # "https://jmyyri.com/recliners",
-    # "https://www.anna-kraher.de/#about"
-]
-
-
 all_websites_frequent_words_dict_example = [
     {'WEB Adress': 'https://www.fuckhead.at/',
      'Top Words': [('Eat', 6), ('Immer', 6), ('Kapital', 5), ('Piketty', 5), ('Rich', 5), ('Dämonen', 4), ('Grenzen', 4), ('Kapitalismus', 4), ('Baby', 3), ('Eigentum', 3), ('Fuckhead', 3), ('Himmel', 3), ('Lässt', 3), ('Umverteilung', 3), ('Bevor', 2), ('Etcetera', 2), ('Gebe', 2), ('Große', 2), ('Macht', 2), ('Menschen', 2)]},
@@ -44,31 +23,4 @@ all_websites_frequent_words_dict_translated_en_example = [
         'Top Words': [('Interstellar', 54), ('Records', 52), ('Release', 50), ('New', 47), ('Link', 41), ('Releases', 38), ('Tumid', 35), ('Album', 29), ('Rock', 26), ('One', 22), ('Bug', 21), ('First', 21), ('Hell', 20), ('Like', 20), ('Mailorder', 20), ('Years', 20), ('Regolith', 19), ('Time', 19), ('Upcoming', 19), ('Released', 18)]},
     {'WEB Adress': 'https://kuprosauwald.org/',
         'Top Words': [('Obernberg', 11), ('Saved', 10), ('Burg', 9), ('Petra', 8), ('October', 7), ('Art house', 6), ('Esternberg', 6), ('Helmut', 5), ('Lounge', 5), ('Sunday', 5), ('Thomas', 5), ('Augustin', 4), ('Exhibition', 4), ('Heinz', 4), ('Innviertler', 4), ('Open', 4), ('Samir', 4), ('Saturday', 4), ('Three', 4), ('Whole', 4)]}
-]
-
-common_words_among_websites_dict_example = [
-    {'WEB Adress': 'https://www.xxx.at/',
-     'Top Words': [('A3', 6), ('B3', 6), ('C2', 5), ('D2', 5), ('E', 5)]},
-    {'WEB Adress': 'http://www.yyy.at/',
-     'Top Words': [('A3', 54), ('B3', 52), ('C2', 50), ('D', 47), ('F', 41)]},
-    {'WEB Adress': 'https://www.zzz.at/',
-     'Top Words': [('A3', 11), ('B3', 10), ('C', 9), ('D2', 8), ('G', 7)]}
-]
-
-common_words_among_websites_dict_translated_de_example = [
-    {'WEB Adress': 'https://www.xxx.at/',
-     'Top Words': [('A3', 6), ('B3', 6), ('C2', 5), ('D2', 5), ('E', 5)]},
-    {'WEB Adress': 'http://www.yyy.at/',
-     'Top Words': [('A3', 54), ('B3', 52), ('C2', 50), ('D', 47), ('F', 41)]},
-    {'WEB Adress': 'https://www.zzz.at/',
-     'Top Words': [('A3', 11), ('B3', 10), ('C', 9), ('D2', 8), ('G', 7)]}
-]
-
-common_words_among_websites_dict_translated_en_example = [
-    {'WEB Adress': 'https://www.xxx.at/',
-     'Top Words': [('A3', 6), ('B3', 6), ('C2', 5), ('D2', 5), ('E', 5)]},
-    {'WEB Adress': 'http://www.yyy.at/',
-     'Top Words': [('A3', 54), ('B3', 52), ('C2', 50), ('D', 47), ('F', 41)]},
-    {'WEB Adress': 'https://www.zzz.at/',
-     'Top Words': [('A3', 11), ('B3', 10), ('C', 9), ('D2', 8), ('G', 7)]}
 ]
