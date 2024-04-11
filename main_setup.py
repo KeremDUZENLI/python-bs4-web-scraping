@@ -17,26 +17,28 @@ class WebsiteAnalyzer:
         self.output_type = output_type
         self.run_type = run_type
 
-        xls_version = ["separated", "concatenated"]
+        xls_version = ["seperated", "concatenated"]
         self.xls_version_choice = xls_version[0]
 
         self.deepl_auth_key = setup_env()
         self.target_language_1 = 'DE'
         self.target_language_2 = 'EN-GB'
 
-        Setup(self.top_frequency,
-              self.languages,
-              self.action_type,
-              self.output_type,
-              self.run_type)
+        setup = Setup
+        setup.set_input_folders(self)
+        setup.set_input_files(self)
+        setup.set_output_folders(self)
+        setup.set_output_files(self)
+        setup.set_dictionaries(self, self.run_type)
+
         self.create_common_and_frequent_words()
 
     def create_common_and_frequent_words(self):
         if self.action_type in ["COMMON_WORDS", "BOTH"]:
-            self.create_common_words(self)
+            self.create_common_words()
 
         if self.action_type in ["FREQUENT_WORDS", "BOTH"]:
-            self.create_frequent_words(self)
+            self.create_frequent_words()
 
     def create_common_words(self):
         if self.output_type in ["CSV", "BOTH"]:
@@ -102,19 +104,6 @@ class WebsiteAnalyzer:
 
 
 class Setup:
-    def __init__(self, top_frequency=5, languages=None, action_type=None, output_type=None, run_type=None):
-        self.top_frequency = top_frequency
-        self.languages = languages
-        self.action_type = action_type
-        self.output_type = output_type
-        self.run_type = run_type
-
-        self.set_input_folders()
-        self.set_input_files()
-        self.set_output_folders()
-        self.set_output_files()
-        self.set_dictionaries()
-
     def set_input_folders(self):
         self.directory_input = "input/"
 
@@ -174,7 +163,7 @@ class Setup:
         self.all_websites_frequent_words_dict_translated_xlsx_en = self.directory_output_frequent_xls +\
             "all_websites_frequent_words_dict_translated_en.xlsx"
 
-    def set_dictionaries(self):
+    def set_dictionaries(self, run_type):
         loadMock = LoadMock
         self.all_websites_frequent_words_dict = []
         self.all_websites_frequent_words_dict_translated_de = []
@@ -193,5 +182,5 @@ class Setup:
             None: lambda x: None
         }
 
-        runs_types.get(self.run_type)(self)
+        runs_types.get(run_type)(self)
         save_frequent_words_dict_as_txt(self)
