@@ -1,7 +1,7 @@
 website_urls_example = [
-    # "https://www.fuckhead.at/",
-    # "http://www.interstellarrecords.at/index.php",
-    # "https://kuprosauwald.org/",
+    "https://www.fuckhead.at/",
+    "http://www.interstellarrecords.at/index.php",
+    "https://kuprosauwald.org/",
     "https://röda.at/der-verein/",
     "http://www.grgr.at/",
     # "https://www.grgr.at/aboutme/",

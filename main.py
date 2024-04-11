@@ -1,12 +1,9 @@
-from main_setup import WebsiteAnalyzer
+from main_setup import Setup, WebsiteAnalyzer
 
 
 def main():
-    analyzer = WebsiteAnalyzer(
-        top_frequency=1, languages="BOTH", output_type="BOTH", action_type="read_excel")
-
-    analyzer.create_frequent_words()
-    analyzer.create_common_words()
+    WebsiteAnalyzer(
+        top_frequency=1, languages=None, action_type=None, output_type=None, run_type="read_websites")
 
 
 if __name__ == "__main__":

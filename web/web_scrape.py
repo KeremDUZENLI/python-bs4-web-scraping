@@ -12,7 +12,7 @@ def create_frequent_words_from_example(class_instance):
 
 def create_frequent_words_from_excel(class_instance):
     class_instance.all_websites_url = read_website_urls_from_excel(
-        "input/websites.xlsx")
+        class_instance.directory_input_excel)
     analyze_websites_translate_create_dict(class_instance)
 
 

@@ -1,8 +1,6 @@
 import pandas as pd
 from tool.tool import calculate_common_words_tracker, sort_common_words
 
-directory_xls = "excel/"
-
 
 def create_all_websites_frequent_words_dict_to_excel(all_websites_frequent_words_dict, output_excel, version="seperated"):
     if not all_websites_frequent_words_dict:
