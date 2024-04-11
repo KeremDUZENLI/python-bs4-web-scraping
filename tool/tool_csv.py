@@ -1,6 +1,8 @@
 import csv
 from tool.tool import calculate_common_words_tracker, sort_common_words
 
+directory_csv = "csv/"
+
 
 def create_all_websites_frequent_words_dict_to_csv(all_websites_frequent_words_dict, output_csv):
     with open(output_csv, mode='w', encoding='utf-8', newline='') as csv_file:
