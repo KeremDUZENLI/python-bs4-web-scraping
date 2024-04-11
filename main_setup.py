@@ -104,13 +104,6 @@ class WebsiteAnalyzer:
 
 
 class Setup:
-    def run(self):
-        self.set_input_folders()
-        self.set_input_files()
-        self.set_output_folders()
-        self.set_output_files()
-        self.set_dictionaries()
-
     def set_input_folders(self):
         self.directory_input = "input/"
 
