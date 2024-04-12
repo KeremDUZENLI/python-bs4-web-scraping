@@ -3,7 +3,7 @@ from tool.tool import calculate_common_words_tracker, sort_common_words
 
 
 def create_all_websites_frequent_words_dict_to_excel(all_websites_frequent_words_dict, output_excel, xls_type):
-    if not all_websites_frequent_words_dict:
+    if not all_websites_frequent_words_dict or xls_type == None:
         empty_df = pd.DataFrame(
             columns=['WEB Adress', 'Most Frequent Words', 'Frequency'])
         empty_df.to_excel(output_excel, index=False)
@@ -79,7 +79,8 @@ def create_website_df_concatenated(website_url, top_words_and_frequency, freq_va
 
 
 def read_website_urls_from_excel(input_excel):
-    df = pd.read_excel(input_excel)
-    website_urls = df['Websites'].unique().tolist()
-    website_urls = ['https://www.' + url for url in website_urls]
-    return website_urls
+    try:
+        df = pd.read_excel(input_excel)
+        return ['https://www.' + url for url in df['Websites'].unique().tolist()]
+    except FileNotFoundError:
+        return []

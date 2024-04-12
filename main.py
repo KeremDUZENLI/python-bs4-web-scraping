@@ -1,24 +1,42 @@
 from main_setup import WebsiteAnalyzer
 
-action_type = ["BOTH", "COMMON_WORDS", "FREQUENT_WORDS"]
-output_type = ["BOTH", "CSV", "EXCEL"]
-language = ["BOTH", "DEUTSCH", "ENGLISH"]
+action_type = {0: None,
+               1: "BOTH",
+               2: "COMMON_WORDS",
+               3: "FREQUENT_WORDS"}
 
-xls_type = ["SEPARATE", "CONCATENATE"]
-run_type = ["MOCK_COMMONS", "MOCK_FREQUENCY",
-            "READ_TXT", "READ_WEBSITES", "READ_EXCEL"]
+output_type = {0: None,
+               1: "BOTH",
+               2: "CSV",
+               3: "EXCEL"}
 
-top_frequency = 1
+language = {0: None,
+            1: "BOTH",
+            2: "DEUTSCH",
+            3: "ENGLISH"}
+
+xls_type = {0: None,
+            1: "SEPARATE",
+            2: "CONCATENATE"}
+
+run_type = {0: None,
+            1: "MOCK_COMMONS",
+            2: "MOCK_FREQUENCY",
+            3: "READ_TXT",
+            4: "READ_WEBSITES",
+            5: "READ_EXCEL"}
+
+top_frequency = 2
 
 
 def main():
     WebsiteAnalyzer(
-        action_type[0],
-        output_type[0],
-        language[0],
+        action_type[1],
+        output_type[1],
+        language[1],
 
-        xls_type[0],
-        run_type[0],
+        xls_type[2],
+        run_type[5],
 
         top_frequency
     )

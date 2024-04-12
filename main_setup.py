@@ -162,15 +162,15 @@ class Setup:
             "all_websites_frequent_words_dict_translated_en.xlsx"
 
     def set_dictionaries(self, analyzer):
-        load_mock = LoadMock
         analyzer.all_websites_frequent_words_dict = []
         analyzer.all_websites_frequent_words_dict_translated_de = []
         analyzer.all_websites_frequent_words_dict_translated_en = []
-        analyzer.all_websites_url = []
 
         runs_types = {
-            "MOCK_COMMONS": load_mock.load_commons_mock,
-            "MOCK_FREQUENCY": load_mock.load_frequency_mock,
+            None: lambda x: None,
+
+            "MOCK_COMMONS": LoadMock.load_commons_mock,
+            "MOCK_FREQUENCY": LoadMock.load_frequency_mock,
 
             "READ_TXT": read_frequent_words_from_txt,
 
