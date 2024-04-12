@@ -24,37 +24,16 @@ class WebsiteAnalyzer:
         xls_version = ["seperated", "concatenated"]
         self.xls_version_choice = xls_version[0]
 
-        setup = Setup
-        setup.set_input_folders(self)
-        setup.set_input_files(self)
-        setup.set_output_folders(self)
-        setup.set_output_files(self)
+        Setup.run(self)
 
-        self.set_dictionaries()
+        # setup = Setup
+        # setup.set_input_folders(self)
+        # setup.set_input_files(self)
+        # setup.set_output_folders(self)
+        # setup.set_output_files(self)
+        # setup.set_dictionaries(self)
 
         self.create_common_and_frequent_words()
-
-    def set_dictionaries(self):
-        load_mock = LoadMock
-        self.all_websites_frequent_words_dict = []
-        self.all_websites_frequent_words_dict_translated_de = []
-        self.all_websites_frequent_words_dict_translated_en = []
-        self.all_websites_url = []
-
-        runs_types = {
-            "mock_commons": load_mock.load_commons_mock,
-            "mock_frequency": load_mock.load_frequency_mock,
-
-            "read_txt": read_frequent_words_from_txt,
-
-            "read_websites": create_frequent_words_from_example,
-            "read_excel": create_frequent_words_from_excel,
-
-            None: lambda x: None
-        }
-
-        runs_types.get(self.run_type)(self)
-        save_frequent_words_dict_as_txt(self)
 
     def create_common_and_frequent_words(self):
         if self.action_type in ["COMMON_WORDS", "BOTH"]:
@@ -127,61 +106,95 @@ class WebsiteAnalyzer:
 
 
 class Setup:
-    def set_input_folders(self):
-        self.directory_input = "input/"
+    @classmethod
+    def run(cls, analyzer):
+        cls.set_input_folders(analyzer)
+        cls.set_input_files(analyzer)
+        cls.set_output_folders(analyzer)
+        cls.set_output_files(analyzer)
+        cls.set_dictionaries(analyzer)
 
-    def set_input_files(self):
-        self.directory_input_excel = self.directory_input + \
-            "websites.xlsx"
+    @classmethod
+    def set_input_folders(cls, analyzer):
+        analyzer.directory_input = "input/"
 
-    def set_output_folders(self):
-        self.directory_output = "output/"
-        self.directory_output_common_csv = "output/common_words/csv/"
-        self.directory_output_common_xls = "output/common_words/xls/"
-        self.directory_output_frequent_csv = "output/frequent_words/csv/"
-        self.directory_output_frequent_xls = "output/frequent_words/xls/"
+    @classmethod
+    def set_input_files(cls, analyzer):
+        analyzer.directory_input_excel = analyzer.directory_input + "websites.xlsx"
+
+    @classmethod
+    def set_output_folders(cls, analyzer):
+        analyzer.directory_output = "output/"
+        analyzer.directory_output_common_csv = "output/common_words/csv/"
+        analyzer.directory_output_common_xls = "output/common_words/xls/"
+        analyzer.directory_output_frequent_csv = "output/frequent_words/csv/"
+        analyzer.directory_output_frequent_xls = "output/frequent_words/xls/"
 
         folders = [
-            self.directory_output,
-            self.directory_output_common_csv,
-            self.directory_output_common_xls,
-            self.directory_output_frequent_csv,
-            self.directory_output_frequent_xls
+            analyzer.directory_output,
+            analyzer.directory_output_common_csv,
+            analyzer.directory_output_common_xls,
+            analyzer.directory_output_frequent_csv,
+            analyzer.directory_output_frequent_xls
         ]
 
         for folder_name in folders:
             setup_output_directory(folder_name)
 
-    def set_output_files(self):
-        self.all_websites_frequent_words_dict_txt = self.directory_output + \
+    @classmethod
+    def set_output_files(cls, analyzer):
+        analyzer.all_websites_frequent_words_dict_txt = analyzer.directory_output + \
             "all_websites_frequent_words_dict.txt"
-        self.all_websites_frequent_words_dict_translated_txt_de = self.directory_output + \
+        analyzer.all_websites_frequent_words_dict_translated_txt_de = analyzer.directory_output + \
             "all_websites_frequent_words_dict_translated_de.txt"
-        self.all_websites_frequent_words_dict_translated_txt_en = self.directory_output + \
+        analyzer.all_websites_frequent_words_dict_translated_txt_en = analyzer.directory_output + \
             "all_websites_frequent_words_dict_translated_en.txt"
 
-        self.common_words_among_websites_dict_csv = self.directory_output_common_csv + \
+        analyzer.common_words_among_websites_dict_csv = analyzer.directory_output_common_csv + \
             "common_words_among_websites_dict.csv"
-        self.common_words_among_websites_dict_translated_csv_de = self.directory_output_common_csv + \
+        analyzer.common_words_among_websites_dict_translated_csv_de = analyzer.directory_output_common_csv + \
             "common_words_among_websites_dict_translated_de.csv"
-        self.common_words_among_websites_dict_translated_csv_en = self.directory_output_common_csv + \
+        analyzer.common_words_among_websites_dict_translated_csv_en = analyzer.directory_output_common_csv + \
             "common_words_among_websites_dict_translated_en.csv"
-        self.common_words_among_websites_dict_xlsx = self.directory_output_common_xls + \
+        analyzer.common_words_among_websites_dict_xlsx = analyzer.directory_output_common_xls + \
             "common_words_among_websites_dict.xlsx"
-        self.common_words_among_websites_dict_translated_xlsx_de = self.directory_output_common_xls +\
+        analyzer.common_words_among_websites_dict_translated_xlsx_de = analyzer.directory_output_common_xls + \
             "common_words_among_websites_dict_translated_de.xlsx"
-        self.common_words_among_websites_dict_translated_xlsx_en = self.directory_output_common_xls +\
+        analyzer.common_words_among_websites_dict_translated_xlsx_en = analyzer.directory_output_common_xls + \
             "common_words_among_websites_dict_translated_en.xlsx"
 
-        self.all_websites_frequent_words_dict_csv = self.directory_output_frequent_csv + \
+        analyzer.all_websites_frequent_words_dict_csv = analyzer.directory_output_frequent_csv + \
             "all_websites_frequent_words_dict.csv"
-        self.all_websites_frequent_words_dict_translated_csv_de = self.directory_output_frequent_csv + \
+        analyzer.all_websites_frequent_words_dict_translated_csv_de = analyzer.directory_output_frequent_csv + \
             "all_websites_frequent_words_dict_translated_de.csv"
-        self.all_websites_frequent_words_dict_translated_csv_en = self.directory_output_frequent_csv +\
+        analyzer.all_websites_frequent_words_dict_translated_csv_en = analyzer.directory_output_frequent_csv + \
             "all_websites_frequent_words_dict_translated_en.csv"
-        self.all_websites_frequent_words_dict_xlsx = self.directory_output_frequent_xls + \
+        analyzer.all_websites_frequent_words_dict_xlsx = analyzer.directory_output_frequent_xls + \
             "all_websites_frequent_words_dict.xlsx"
-        self.all_websites_frequent_words_dict_translated_xlsx_de = self.directory_output_frequent_xls +\
+        analyzer.all_websites_frequent_words_dict_translated_xlsx_de = analyzer.directory_output_frequent_xls + \
             "all_websites_frequent_words_dict_translated_de.xlsx"
-        self.all_websites_frequent_words_dict_translated_xlsx_en = self.directory_output_frequent_xls +\
+        analyzer.all_websites_frequent_words_dict_translated_xlsx_en = analyzer.directory_output_frequent_xls + \
             "all_websites_frequent_words_dict_translated_en.xlsx"
+
+    @classmethod
+    def set_dictionaries(cls, analyzer):
+        load_mock = LoadMock
+        analyzer.all_websites_frequent_words_dict = []
+        analyzer.all_websites_frequent_words_dict_translated_de = []
+        analyzer.all_websites_frequent_words_dict_translated_en = []
+        analyzer.all_websites_url = []
+
+        runs_types = {
+            "mock_commons": load_mock.load_commons_mock,
+            "mock_frequency": load_mock.load_frequency_mock,
+
+            "read_txt": read_frequent_words_from_txt,
+
+            "read_websites": create_frequent_words_from_example,
+            "read_excel": create_frequent_words_from_excel,
+
+            None: lambda x: None
+        }
+
+        runs_types.get(analyzer.run_type)(analyzer)
+        save_frequent_words_dict_as_txt(analyzer)
