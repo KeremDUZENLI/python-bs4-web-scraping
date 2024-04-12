@@ -29,9 +29,32 @@ class WebsiteAnalyzer:
         setup.set_input_files(self)
         setup.set_output_folders(self)
         setup.set_output_files(self)
-        setup.set_dictionaries(self)
+
+        self.set_dictionaries()
 
         self.create_common_and_frequent_words()
+
+    def set_dictionaries(self):
+        load_mock = LoadMock
+        self.all_websites_frequent_words_dict = []
+        self.all_websites_frequent_words_dict_translated_de = []
+        self.all_websites_frequent_words_dict_translated_en = []
+        self.all_websites_url = []
+
+        runs_types = {
+            "mock_commons": load_mock.load_commons_mock,
+            "mock_frequency": load_mock.load_frequency_mock,
+
+            "read_txt": read_frequent_words_from_txt,
+
+            "read_websites": create_frequent_words_from_example,
+            "read_excel": create_frequent_words_from_excel,
+
+            None: lambda x: None
+        }
+
+        runs_types.get(self.run_type)(self)
+        save_frequent_words_dict_as_txt(self)
 
     def create_common_and_frequent_words(self):
         if self.action_type in ["COMMON_WORDS", "BOTH"]:
@@ -162,25 +185,3 @@ class Setup:
             "all_websites_frequent_words_dict_translated_de.xlsx"
         self.all_websites_frequent_words_dict_translated_xlsx_en = self.directory_output_frequent_xls +\
             "all_websites_frequent_words_dict_translated_en.xlsx"
-
-    def set_dictionaries(self):
-        load_mock = LoadMock
-        self.all_websites_frequent_words_dict = []
-        self.all_websites_frequent_words_dict_translated_de = []
-        self.all_websites_frequent_words_dict_translated_en = []
-        self.all_websites_url = []
-
-        runs_types = {
-            "mock_commons": load_mock.load_commons_mock,
-            "mock_frequency": load_mock.load_frequency_mock,
-
-            "read_txt": read_frequent_words_from_txt,
-
-            "read_websites": create_frequent_words_from_example,
-            "read_excel": create_frequent_words_from_excel,
-
-            None: lambda x: None
-        }
-
-        runs_types.get(self.run_type)(self)
-        save_frequent_words_dict_as_txt(self)
