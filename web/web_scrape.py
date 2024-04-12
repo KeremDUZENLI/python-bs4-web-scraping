@@ -20,11 +20,11 @@ def analyze_websites_translate_create_dict(class_instance):
     class_instance.all_websites_frequent_words_dict = create_all_websites_frequent_words_dict(
         class_instance.all_websites_url, class_instance.top_frequency)
 
-    if class_instance.languages in ["DEUTSCH", "BOTH"]:
+    if class_instance.language in ["DEUTSCH", "BOTH"]:
         class_instance.all_websites_frequent_words_dict_translated_de = create_all_websites_frequent_words_dict_translated(
             class_instance.all_websites_frequent_words_dict, class_instance.target_language_1, class_instance.deepl_auth_key)
 
-    if class_instance.languages in ["ENGLISH", "BOTH"]:
+    if class_instance.language in ["ENGLISH", "BOTH"]:
         class_instance.all_websites_frequent_words_dict_translated_en = create_all_websites_frequent_words_dict_translated(
             class_instance.all_websites_frequent_words_dict, class_instance.target_language_2, class_instance.deepl_auth_key)
 

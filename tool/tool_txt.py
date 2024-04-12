@@ -5,11 +5,11 @@ def read_frequent_words_from_txt(class_instance):
     class_instance.all_websites_frequent_words_dict = read_all_websites_frequent_words_dict_from_txt(
         class_instance.all_websites_frequent_words_dict_txt)
 
-    if class_instance.languages in ["DEUTSCH", "BOTH"]:
+    if class_instance.language in ["DEUTSCH", "BOTH"]:
         class_instance.all_websites_frequent_words_dict_translated_de = read_all_websites_frequent_words_dict_from_txt(
             class_instance.all_websites_frequent_words_dict_translated_txt_de)
 
-    if class_instance.languages in ["ENGLISH", "BOTH"]:
+    if class_instance.language in ["ENGLISH", "BOTH"]:
         class_instance.all_websites_frequent_words_dict_translated_en = read_all_websites_frequent_words_dict_from_txt(
             class_instance.all_websites_frequent_words_dict_translated_txt_en)
 
@@ -18,11 +18,11 @@ def save_frequent_words_dict_as_txt(class_instance):
     create_all_websites_frequent_words_dict_to_txt(
         class_instance.all_websites_frequent_words_dict, class_instance.all_websites_frequent_words_dict_txt)
 
-    if class_instance.languages in ["DEUTSCH", "BOTH"]:
+    if class_instance.language in ["DEUTSCH", "BOTH"]:
         create_all_websites_frequent_words_dict_to_txt(
             class_instance.all_websites_frequent_words_dict_translated_de, class_instance.all_websites_frequent_words_dict_translated_txt_de)
 
-    if class_instance.languages in ["ENGLISH", "BOTH"]:
+    if class_instance.language in ["ENGLISH", "BOTH"]:
         create_all_websites_frequent_words_dict_to_txt(
             class_instance.all_websites_frequent_words_dict_translated_en, class_instance.all_websites_frequent_words_dict_translated_txt_en)
 

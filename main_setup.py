@@ -10,19 +10,17 @@ from web.web_scrape import create_frequent_words_from_example, create_frequent_w
 
 
 class WebsiteAnalyzer:
-    def __init__(self, top_frequency=5, languages=None, action_type=None, output_type=None, run_type=None):
-        self.top_frequency = top_frequency
-        self.languages = languages
+    def __init__(self, action_type, output_type, language, xls_type, run_type, top_frequency):
         self.action_type = action_type
         self.output_type = output_type
+        self.language = language
+        self.xls_type = xls_type
         self.run_type = run_type
+        self.top_frequency = top_frequency
 
         self.deepl_auth_key = setup_env()
         self.target_language_1 = 'DE'
         self.target_language_2 = 'EN-GB'
-
-        xls_version = ["separated", "concatenated"]
-        self.xls_version_choice = xls_version[0]
 
         Setup(self)
         self.create_common_and_frequent_words()
@@ -52,11 +50,11 @@ class WebsiteAnalyzer:
         create_common_words_among_websites_dict_to_csv(
             self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_csv)
 
-        if self.languages in ["DEUTSCH", "BOTH"]:
+        if self.language in ["DEUTSCH", "BOTH"]:
             create_common_words_among_websites_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_de, self.common_words_among_websites_dict_translated_csv_de)
 
-        if self.languages in ["ENGLISH", "BOTH"]:
+        if self.language in ["ENGLISH", "BOTH"]:
             create_common_words_among_websites_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_csv_en)
 
@@ -64,11 +62,11 @@ class WebsiteAnalyzer:
         create_common_words_among_websites_dict_to_excel(
             self.all_websites_frequent_words_dict, self.common_words_among_websites_dict_xlsx)
 
-        if self.languages in ["DEUTSCH", "BOTH"]:
+        if self.language in ["DEUTSCH", "BOTH"]:
             create_common_words_among_websites_dict_to_excel(
                 self.all_websites_frequent_words_dict_translated_de, self.common_words_among_websites_dict_translated_xlsx_de)
 
-        if self.languages in ["ENGLISH", "BOTH"]:
+        if self.language in ["ENGLISH", "BOTH"]:
             create_common_words_among_websites_dict_to_excel(
                 self.all_websites_frequent_words_dict_translated_en, self.common_words_among_websites_dict_translated_xlsx_en)
 
@@ -76,25 +74,25 @@ class WebsiteAnalyzer:
         create_all_websites_frequent_words_dict_to_csv(
             self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_csv)
 
-        if self.languages in ["DEUTSCH", "BOTH"]:
+        if self.language in ["DEUTSCH", "BOTH"]:
             create_all_websites_frequent_words_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_csv_de)
 
-        if self.languages in ["ENGLISH", "BOTH"]:
+        if self.language in ["ENGLISH", "BOTH"]:
             create_all_websites_frequent_words_dict_to_csv(
                 self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_csv_en)
 
     def create_frequent_words_dict_to_xls(self):
         create_all_websites_frequent_words_dict_to_excel(
-            self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_xlsx, self.xls_version_choice)
+            self.all_websites_frequent_words_dict, self.all_websites_frequent_words_dict_xlsx, self.xls_type)
 
-        if self.languages in ["DEUTSCH", "BOTH"]:
+        if self.language in ["DEUTSCH", "BOTH"]:
             create_all_websites_frequent_words_dict_to_excel(
-                self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_xlsx_de, self.xls_version_choice)
+                self.all_websites_frequent_words_dict_translated_de, self.all_websites_frequent_words_dict_translated_xlsx_de, self.xls_type)
 
-        if self.languages in ["ENGLISH", "BOTH"]:
+        if self.language in ["ENGLISH", "BOTH"]:
             create_all_websites_frequent_words_dict_to_excel(
-                self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_xlsx_en, self.xls_version_choice)
+                self.all_websites_frequent_words_dict_translated_en, self.all_websites_frequent_words_dict_translated_xlsx_en, self.xls_type)
 
 
 class Setup:
@@ -171,15 +169,13 @@ class Setup:
         analyzer.all_websites_url = []
 
         runs_types = {
-            "mock_commons": load_mock.load_commons_mock,
-            "mock_frequency": load_mock.load_frequency_mock,
+            "MOCK_COMMONS": load_mock.load_commons_mock,
+            "MOCK_FREQUENCY": load_mock.load_frequency_mock,
 
-            "read_txt": read_frequent_words_from_txt,
+            "READ_TXT": read_frequent_words_from_txt,
 
-            "read_websites": create_frequent_words_from_example,
-            "read_excel": create_frequent_words_from_excel,
-
-            None: lambda x: None
+            "READ_WEBSITES": create_frequent_words_from_example,
+            "READ_EXCEL": create_frequent_words_from_excel,
         }
 
         runs_types.get(analyzer.run_type)(analyzer)
