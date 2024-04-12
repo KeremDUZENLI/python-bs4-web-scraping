@@ -21,18 +21,10 @@ class WebsiteAnalyzer:
         self.target_language_1 = 'DE'
         self.target_language_2 = 'EN-GB'
 
-        xls_version = ["seperated", "concatenated"]
+        xls_version = ["separated", "concatenated"]
         self.xls_version_choice = xls_version[0]
 
-        Setup.run(self)
-
-        # setup = Setup
-        # setup.set_input_folders(self)
-        # setup.set_input_files(self)
-        # setup.set_output_folders(self)
-        # setup.set_output_files(self)
-        # setup.set_dictionaries(self)
-
+        Setup(self)
         self.create_common_and_frequent_words()
 
     def create_common_and_frequent_words(self):
@@ -106,24 +98,20 @@ class WebsiteAnalyzer:
 
 
 class Setup:
-    @classmethod
-    def run(cls, analyzer):
-        cls.set_input_folders(analyzer)
-        cls.set_input_files(analyzer)
-        cls.set_output_folders(analyzer)
-        cls.set_output_files(analyzer)
-        cls.set_dictionaries(analyzer)
+    def __init__(self, analyzer):
+        self.set_input_folders(analyzer)
+        self.set_input_files(analyzer)
+        self.set_output_folders(analyzer)
+        self.set_output_files(analyzer)
+        self.set_dictionaries(analyzer)
 
-    @classmethod
-    def set_input_folders(cls, analyzer):
+    def set_input_folders(self, analyzer):
         analyzer.directory_input = "input/"
 
-    @classmethod
-    def set_input_files(cls, analyzer):
+    def set_input_files(self, analyzer):
         analyzer.directory_input_excel = analyzer.directory_input + "websites.xlsx"
 
-    @classmethod
-    def set_output_folders(cls, analyzer):
+    def set_output_folders(self, analyzer):
         analyzer.directory_output = "output/"
         analyzer.directory_output_common_csv = "output/common_words/csv/"
         analyzer.directory_output_common_xls = "output/common_words/xls/"
@@ -141,8 +129,7 @@ class Setup:
         for folder_name in folders:
             setup_output_directory(folder_name)
 
-    @classmethod
-    def set_output_files(cls, analyzer):
+    def set_output_files(self, analyzer):
         analyzer.all_websites_frequent_words_dict_txt = analyzer.directory_output + \
             "all_websites_frequent_words_dict.txt"
         analyzer.all_websites_frequent_words_dict_translated_txt_de = analyzer.directory_output + \
@@ -176,8 +163,7 @@ class Setup:
         analyzer.all_websites_frequent_words_dict_translated_xlsx_en = analyzer.directory_output_frequent_xls + \
             "all_websites_frequent_words_dict_translated_en.xlsx"
 
-    @classmethod
-    def set_dictionaries(cls, analyzer):
+    def set_dictionaries(self, analyzer):
         load_mock = LoadMock
         analyzer.all_websites_frequent_words_dict = []
         analyzer.all_websites_frequent_words_dict_translated_de = []

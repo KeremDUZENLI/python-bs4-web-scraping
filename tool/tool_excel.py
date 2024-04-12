@@ -2,7 +2,7 @@ import pandas as pd
 from tool.tool import calculate_common_words_tracker, sort_common_words
 
 
-def create_all_websites_frequent_words_dict_to_excel(all_websites_frequent_words_dict, output_excel, version="seperated"):
+def create_all_websites_frequent_words_dict_to_excel(all_websites_frequent_words_dict, output_excel, version="separated"):
     if not all_websites_frequent_words_dict:
         empty_df = pd.DataFrame(
             columns=['WEB Adress', 'Most Frequent Words', 'Frequency'])
@@ -11,7 +11,7 @@ def create_all_websites_frequent_words_dict_to_excel(all_websites_frequent_words
 
     dfs = []
 
-    if version == "seperated":
+    if version == "separated":
         create_website_df = create_website_df_seperated
         columns = ['WEB Adress', 'Most Frequent Words', 'Frequency']
 
