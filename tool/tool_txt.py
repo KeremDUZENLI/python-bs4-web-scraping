@@ -28,7 +28,7 @@ def read_frequent_words_from_txt(class_instance):
 
 
 def create_all_websites_frequent_words_dict_to_txt(all_websites_frequent_words_dict, output_txt):
-    with open(output_txt, 'w') as f:
+    with open(output_txt, 'w', encoding='utf-8') as f:
         f.write(str(all_websites_frequent_words_dict))
 
 

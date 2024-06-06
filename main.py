@@ -26,16 +26,16 @@ run_type = {0: None,
             4: "READ_WEBSITES",
             5: "READ_EXCEL"}
 
-top_frequency = 2
+top_frequency = 10
 
 
 def main():
     WebsiteAnalyzer(
         action_type[1],
-        output_type[1],
-        language[1],
+        output_type[3],
+        language[0],
 
-        xls_type[2],
+        xls_type[1],
         run_type[5],
 
         top_frequency
