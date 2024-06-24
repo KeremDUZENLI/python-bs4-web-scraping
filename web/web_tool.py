@@ -34,11 +34,11 @@ def scrape_website_get_frequent_words(website_url, top_frequency):
 
 def scrape_website_get_html_content(website_url):
     try:
-        html_content = requests.get(website_url).text
+        html_content = requests.get(website_url, timeout=0.25).text
         return html_content
 
     except Exception as e:
-        print(f"\n ***{website_url}: {e}*** \n")
+        print(f"\n{website_url}: {type(e).__name__}\n")
         return None
 
 

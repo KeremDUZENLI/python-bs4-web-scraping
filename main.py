@@ -32,7 +32,7 @@ top_frequency = 10
 def main():
     WebsiteAnalyzer(
         action_type[1],
-        output_type[3],
+        output_type[1],
         language[0],
 
         xls_type[1],
