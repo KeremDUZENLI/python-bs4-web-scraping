@@ -10,13 +10,14 @@ from web.web_scrape import create_frequent_words_from_example, create_frequent_w
 
 
 class WebsiteAnalyzer:
-    def __init__(self, action_type, output_type, language, xls_type, run_type, top_frequency):
+    def __init__(self, action_type, output_type, language, xls_type, run_type, top_frequency, http_timeout):
         self.action_type = action_type
         self.output_type = output_type
         self.language = language
         self.xls_type = xls_type
         self.run_type = run_type
         self.top_frequency = top_frequency
+        self.http_timeout = http_timeout
 
         self.deepl_auth_key = setup_env()
         self.target_language_1 = 'DE'

@@ -26,7 +26,9 @@ run_type = {0: None,
             4: "READ_WEBSITES",
             5: "READ_EXCEL"}
 
-top_frequency = 10
+top_frequency = 5
+
+http_timeout = 1
 
 
 def main():
@@ -38,7 +40,8 @@ def main():
         xls_type[1],
         run_type[5],
 
-        top_frequency
+        top_frequency,
+        http_timeout
     )
 
 

@@ -38,3 +38,12 @@ def write_sorted_common_words_to_csv(output_csv, sorted_common_words):
                 sorted([f"{site} ({freq})" for site, freq in websites_freq]))
             total_frequency = sum(freq for _, freq in websites_freq)
             writer.writerow([word, total_frequency, websites])
+
+
+def write_unreached_websites_to_csv(unreached_websites, output_csv):
+    with open(output_csv, mode='w', encoding='utf-8', newline='') as output_file:
+        writer = csv.writer(output_file)
+        writer.writerow(['Website', 'Error'])
+
+        for website, error in unreached_websites:
+            writer.writerow([website, error])

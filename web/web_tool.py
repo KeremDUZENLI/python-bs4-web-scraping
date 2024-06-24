@@ -16,8 +16,8 @@ DELETE_TEXT = ["\"", "//", "'", "*", "\n", "\t", "–", "“", "„", "€", "$"
                "xml version='1.0' encoding='utf-8'?", "html", ""] + list(string.punctuation)
 
 
-def scrape_website_get_frequent_words(website_url, top_frequency):
-    html_content = scrape_website_get_html_content(website_url)
+def scrape_website_get_frequent_words(website_url, top_frequency, http_timeout):
+    html_content = scrape_website_get_html_content(website_url, http_timeout)
     if html_content is None:
         return {'WEB Adress': website_url, 'Top Words': []}
 
@@ -32,13 +32,13 @@ def scrape_website_get_frequent_words(website_url, top_frequency):
     return website_common_words_dict
 
 
-def scrape_website_get_html_content(website_url):
+def scrape_website_get_html_content(website_url, http_timeout):
     try:
-        html_content = requests.get(website_url, timeout=0.25).text
+        html_content = requests.get(website_url, timeout=http_timeout).text
         return html_content
 
     except Exception as e:
-        print(f"\n{website_url}: {type(e).__name__}\n")
+        print(f"{website_url}\t\t\t: {type(e).__name__}")
         return None
 
 
