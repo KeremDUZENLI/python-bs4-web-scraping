@@ -6,6 +6,7 @@ from collections import Counter
 from bs4 import BeautifulSoup
 
 
+unreached_websites_dict = []
 nltk.download('stopwords')
 nltk.download('punkt')
 
@@ -19,26 +20,33 @@ DELETE_TEXT = ["\"", "//", "'", "*", "\n", "\t", "–", "“", "„", "€", "$"
 def scrape_website_get_frequent_words(website_url, top_frequency, http_timeout):
     html_content = scrape_website_get_html_content(website_url, http_timeout)
     if html_content is None:
-        return {'WEB Adress': website_url, 'Top Words': []}
+        return {
+            'WEB Adress': website_url,
+            'Top Words': []}
 
     website_text = clean_html_content(html_content)
     filtered_text = filter_text(website_text)
     top_words = get_top_words(filtered_text, top_frequency)
     top_words_sorted = sorted(top_words, key=lambda x: (-x[1], x[0]))
 
-    website_common_words_dict = {'WEB Adress': website_url,
-                                 'Top Words': top_words_sorted}
+    website_common_words_dict = {
+        'WEB Adress': website_url,
+        'Top Words': top_words_sorted}
 
     return website_common_words_dict
 
 
 def scrape_website_get_html_content(website_url, http_timeout):
+    global unreached_websites_dic
+
     try:
-        html_content = requests.get(website_url, timeout=http_timeout).text
-        return html_content
+        return requests.get(website_url, timeout=http_timeout).text
 
     except Exception as e:
-        print(f"{website_url}\t\t\t: {type(e).__name__}")
+        error_type = type(e).__name__
+        unreached_websites_dict.append((website_url, error_type))
+        print(f"{website_url}: {error_type}")
+
         return None
 
 
