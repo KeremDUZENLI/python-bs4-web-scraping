@@ -2,8 +2,7 @@ from mock.mocking import LoadMock
 
 from setup.env import setup_env, setup_output_directory
 
-from web.web_tool import unreached_websites_dict
-from tool.tool_csv import create_all_websites_frequent_words_dict_to_csv, create_common_words_among_websites_dict_to_csv, create_unreached_websites_dict_to_csv
+from tool.tool_csv import create_all_websites_frequent_words_dict_to_csv, create_common_words_among_websites_dict_to_csv, save_unreached_websites_dict_as_csv
 from tool.tool_excel import create_all_websites_frequent_words_dict_to_excel, create_common_words_among_websites_dict_to_excel
 from tool.tool_txt import save_frequent_words_dict_as_txt, read_frequent_words_from_txt
 
@@ -26,11 +25,6 @@ class WebsiteAnalyzer:
 
         Setup(self)
         self.create_common_and_frequent_words()
-        self.create_unreached_websites_csv()
-
-    def create_unreached_websites_csv(self):
-        create_unreached_websites_dict_to_csv(
-            unreached_websites_dict, self.unreached_websites_dict_csv)
 
     def create_common_and_frequent_words(self):
         if self.action_type in ["COMMON_WORDS", "BOTH"]:
@@ -135,15 +129,15 @@ class Setup:
             setup_output_directory(folder_name)
 
     def set_output_files(self, analyzer):
-        analyzer.unreached_websites_dict_csv = analyzer.directory_output + \
-            "unreached_websites.csv"
-
         analyzer.all_websites_frequent_words_dict_txt = analyzer.directory_output + \
             "all_websites_frequent_words_dict.txt"
         analyzer.all_websites_frequent_words_dict_translated_txt_de = analyzer.directory_output + \
             "all_websites_frequent_words_dict_translated_de.txt"
         analyzer.all_websites_frequent_words_dict_translated_txt_en = analyzer.directory_output + \
             "all_websites_frequent_words_dict_translated_en.txt"
+
+        analyzer.unreached_websites_dict_csv = analyzer.directory_output + \
+            "unreached_websites.csv"
 
         analyzer.common_words_among_websites_dict_csv = analyzer.directory_output_common_csv + \
             "common_words_among_websites_dict.csv"
@@ -175,6 +169,7 @@ class Setup:
         analyzer.all_websites_frequent_words_dict = []
         analyzer.all_websites_frequent_words_dict_translated_de = []
         analyzer.all_websites_frequent_words_dict_translated_en = []
+        analyzer.unreached_websites_dict = []
 
         runs_types = {
             None: lambda x: None,
@@ -190,3 +185,4 @@ class Setup:
 
         runs_types.get(analyzer.run_type)(analyzer)
         save_frequent_words_dict_as_txt(analyzer)
+        save_unreached_websites_dict_as_csv(analyzer)

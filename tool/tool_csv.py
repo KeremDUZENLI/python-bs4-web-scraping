@@ -37,6 +37,11 @@ def create_all_websites_frequent_words_dict_to_csv(all_websites_frequent_words_d
             writer.writerow([])
 
 
+def save_unreached_websites_dict_as_csv(class_instance):
+    create_unreached_websites_dict_to_csv(
+        class_instance.unreached_websites_dict, class_instance.unreached_websites_dict_csv)
+
+
 def create_unreached_websites_dict_to_csv(unreached_websites_dict, output_csv):
     with open(output_csv, mode='w', encoding='utf-8', newline='') as output_file:
         writer = csv.writer(output_file)

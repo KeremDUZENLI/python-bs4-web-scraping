@@ -17,7 +17,7 @@ def create_frequent_words_from_excel(class_instance):
 
 
 def analyze_websites_translate_create_dict(class_instance):
-    class_instance.all_websites_frequent_words_dict = create_all_websites_frequent_words_dict(
+    class_instance.all_websites_frequent_words_dict, class_instance.unreached_websites_dict = create_all_websites_frequent_words_dict(
         class_instance.all_websites_url, class_instance.top_frequency, class_instance.http_timeout)
 
     if class_instance.language in ["DEUTSCH", "BOTH"]:
@@ -31,17 +31,18 @@ def analyze_websites_translate_create_dict(class_instance):
 
 def create_all_websites_frequent_words_dict(website_urls, top_frequency, http_timeout):
     all_websites_frequent_words_dict = []
+    unreached_websites_dict = []
 
     for website_url in website_urls:
         website_common_words_dict = scrape_website_get_frequent_words(
-            website_url, top_frequency, http_timeout)
+            website_url, top_frequency, http_timeout, unreached_websites_dict)
 
         if website_common_words_dict is None:
             website_common_words_dict = {'WEB Adress': website_url,
                                          'Top Words': None}
         all_websites_frequent_words_dict.append(website_common_words_dict)
 
-    return all_websites_frequent_words_dict
+    return all_websites_frequent_words_dict, unreached_websites_dict
 
 
 def create_all_websites_frequent_words_dict_translated(all_websites_frequent_words_dict, target_language, deepl_auth_key):

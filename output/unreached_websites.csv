@@ -116,6 +116,7 @@ http://tabeacray.com,ConnectTimeout
 http://tamaratrackt.at,ConnectTimeout
 http://theaternacht.at,ConnectTimeout
 http://theaternyx.at,ConnectTimeout
+http://thomasbaum.at,ReadTimeout
 http://totalsilence.de,ConnectTimeout
 http://transversal.wwb.cc,ConnectionError
 http://tschneid.servus.at,ConnectTimeout
@@ -135,5 +136,7 @@ http://wirtshauswissenschaften.at,ConnectTimeout
 http://wohnzimmergalerie.net,ConnectTimeout
 http://wolfgang-muellegger.at,ConnectTimeout
 http://zapalotta.org,ConnectTimeout
+http://zeitgemeinschaft.at,ConnectTimeout
 http://zeitgenossenschaft.at,ConnectTimeout
 http://zeugfaerberei.at,ConnectTimeout
+http://zumutbar.at,ReadTimeout
