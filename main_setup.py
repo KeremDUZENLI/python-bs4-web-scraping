@@ -2,7 +2,7 @@ from mock.mocking import LoadMock
 
 from setup.env import setup_env, setup_output_directory
 
-from tool.tool_csv import create_all_websites_frequent_words_dict_to_csv, create_common_words_among_websites_dict_to_csv, save_unreached_websites_dict_as_csv
+from tool.tool_csv import create_all_websites_frequent_words_dict_to_csv, create_common_words_among_websites_dict_to_csv, save_websites_status_dict_as_csv
 from tool.tool_excel import create_all_websites_frequent_words_dict_to_excel, create_common_words_among_websites_dict_to_excel
 from tool.tool_txt import save_frequent_words_dict_as_txt, read_frequent_words_from_txt
 
@@ -135,9 +135,8 @@ class Setup:
             "all_websites_frequent_words_dict_translated_de.txt"
         analyzer.all_websites_frequent_words_dict_translated_txt_en = analyzer.directory_output + \
             "all_websites_frequent_words_dict_translated_en.txt"
-
-        analyzer.unreached_websites_dict_csv = analyzer.directory_output + \
-            "unreached_websites.csv"
+        analyzer.all_websites_status_dict_csv = analyzer.directory_output + \
+            "all_websites_status.csv"
 
         analyzer.common_words_among_websites_dict_csv = analyzer.directory_output_common_csv + \
             "common_words_among_websites_dict.csv"
@@ -169,7 +168,7 @@ class Setup:
         analyzer.all_websites_frequent_words_dict = []
         analyzer.all_websites_frequent_words_dict_translated_de = []
         analyzer.all_websites_frequent_words_dict_translated_en = []
-        analyzer.unreached_websites_dict = []
+        analyzer.all_websites_status_dict = {}
 
         runs_types = {
             None: lambda x: None,
@@ -185,4 +184,4 @@ class Setup:
 
         runs_types.get(analyzer.run_type)(analyzer)
         save_frequent_words_dict_as_txt(analyzer)
-        save_unreached_websites_dict_as_csv(analyzer)
+        save_websites_status_dict_as_csv(analyzer)

@@ -38,7 +38,7 @@ def main():
         language[0],
 
         xls_type[1],
-        run_type[5],
+        run_type[4],
 
         top_frequency,
         http_timeout

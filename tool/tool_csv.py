@@ -37,15 +37,20 @@ def create_all_websites_frequent_words_dict_to_csv(all_websites_frequent_words_d
             writer.writerow([])
 
 
-def save_unreached_websites_dict_as_csv(class_instance):
-    create_unreached_websites_dict_to_csv(
-        class_instance.unreached_websites_dict, class_instance.unreached_websites_dict_csv)
+def save_websites_status_dict_as_csv(class_instance):
+    create_websites_status_dict_to_csv(
+        class_instance.all_websites_status_dict, class_instance.all_websites_status_dict_csv)
 
 
-def create_unreached_websites_dict_to_csv(unreached_websites_dict, output_csv):
+def create_websites_status_dict_to_csv(websites_dict, output_csv):
     with open(output_csv, mode='w', encoding='utf-8', newline='') as output_file:
         writer = csv.writer(output_file)
-        writer.writerow(['Website', 'Error'])
+        writer.writerow(['Website', 'Status', 'Details'])
 
-        for website, error in unreached_websites_dict:
-            writer.writerow([website, error])
+        for website, data in websites_dict.items():
+            status = data['status']
+            if status == 'reached':
+                writer.writerow(
+                    [website, 'Reached', f"{data['time']:.2f} seconds"])
+            elif status == 'unreached':
+                writer.writerow([website, 'Unreached', data['error']])

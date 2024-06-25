@@ -16,9 +16,9 @@ DELETE_TEXT = ["\"", "//", "'", "*", "\n", "\t", "–", "“", "„", "€", "$"
                "xml version='1.0' encoding='utf-8'?", "html", ""] + list(string.punctuation)
 
 
-def scrape_website_get_frequent_words(website_url, top_frequency, http_timeout, unreached_websites_dict):
+def scrape_website_get_frequent_words(website_url, top_frequency, http_timeout, all_websites_status_dict):
     html_content = scrape_website_get_html_content(
-        website_url, http_timeout, unreached_websites_dict)
+        website_url, http_timeout, all_websites_status_dict)
     if html_content is None:
         return {
             'WEB Adress': website_url,
@@ -36,13 +36,23 @@ def scrape_website_get_frequent_words(website_url, top_frequency, http_timeout, 
     return website_common_words_dict
 
 
-def scrape_website_get_html_content(website_url, http_timeout, unreached_websites_dict):
+def scrape_website_get_html_content(website_url, http_timeout, all_websites_status_dict):
     try:
-        return requests.get(website_url, timeout=http_timeout).text
+        response = requests.get(website_url, timeout=http_timeout)
+        response_time = response.elapsed.total_seconds()
+
+        all_websites_status_dict[website_url] = {
+            'status': 'reached',
+            'time': response_time}
+        print(f"{website_url.ljust(30)} : {response_time:.2f} seconds")
+
+        return response.text
 
     except Exception as e:
         error_type = type(e).__name__
-        unreached_websites_dict.append((website_url, error_type))
+        all_websites_status_dict[website_url] = {
+            'status': 'unreached',
+            'error': error_type}
         print(f"{website_url.ljust(30)} : {error_type}")
 
         return None
