@@ -184,7 +184,7 @@ class Setup:
 
             "READ_TXT": read_frequent_words_from_txt,
 
-            "READ_WEBSITES": create_frequent_words_from_example,
+            "READ_SAMPLE_WEBSITES": create_frequent_words_from_example,
             "READ_EXCEL": create_frequent_words_from_excel,
             "READ_LLIST": create_frequent_words_from_llist,
         }
