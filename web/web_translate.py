@@ -15,3 +15,8 @@ def translate_top_words(top_words, target_language, deepl_auth_key):
 def word_translate_deepl(word, target_language, deepl_auth_key):
     translator = deepl.Translator(deepl_auth_key)
     return translator.translate_text(word, target_lang=target_language).text
+
+
+def word_translate_deepl_usage(deepl_auth_key):
+    translator = deepl.Translator(deepl_auth_key)
+    print(f"\nDeepL API: {translator.get_usage()}\n")

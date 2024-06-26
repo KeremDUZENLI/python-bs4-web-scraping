@@ -1,5 +1,5 @@
 from web.web_tool import create_unique_website_urls_list, scrape_website_get_frequent_words
-from web.web_translate import translate_top_words
+from web.web_translate import translate_top_words, word_translate_deepl_usage
 
 from input.websites import website_urls_example
 from tool.tool_excel import read_website_urls_from_excel
@@ -37,6 +37,8 @@ def analyze_websites_translate_create_dict(class_instance):
     if class_instance.language in ["ENGLISH", "BOTH"]:
         class_instance.all_websites_frequent_words_dict_translated_en = create_all_websites_frequent_words_dict_translated(
             class_instance.all_websites_frequent_words_dict, class_instance.target_language_2, class_instance.deepl_auth_key)
+
+    word_translate_deepl_usage(class_instance.deepl_auth_key)
 
 
 def create_all_websites_frequent_words_dict(website_urls, top_frequency, http_timeout):
