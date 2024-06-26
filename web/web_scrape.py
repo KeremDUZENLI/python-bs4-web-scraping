@@ -58,6 +58,7 @@ def create_all_websites_frequent_words_dict(website_urls, top_frequency, http_ti
 
 
 def create_all_websites_frequent_words_dict_translated(all_websites_frequent_words_dict, target_language, deepl_auth_key):
+    print(f"\nTranslating to {target_language}, Be patient here!")
     all_websites_frequent_words_dict_translated = []
 
     for website_common_words_dict in all_websites_frequent_words_dict:

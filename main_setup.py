@@ -21,7 +21,8 @@ class WebsiteAnalyzer:
         self.top_frequency = top_frequency
         self.http_timeout = http_timeout
 
-        self.deepl_auth_key = setup_env()
+        self.deepl_auth_key = input(
+            "\nEnter DeepL Auth Key (default=press enter): \n") or setup_env()
         self.target_language_1 = 'DE'
         self.target_language_2 = 'EN-GB'
 
@@ -107,33 +108,18 @@ class Setup:
         self.set_dictionaries(analyzer)
 
     def set_input_folders(self, analyzer):
-        # analyzer.directory_input = "input/"
-
-        exe_dir = os.path.dirname(os.path.abspath(__file__))
-        analyzer.directory_input = os.path.join(exe_dir, "input/")
+        analyzer.directory_input = "input/"
 
     def set_input_files(self, analyzer):
         analyzer.directory_input_excel = analyzer.directory_input + "websites.xlsx"
         analyzer.directory_input_llist = analyzer.directory_input + "websites.list"
 
     def set_output_folders(self, analyzer):
-        # analyzer.directory_output = "output/"
-        # analyzer.directory_output_common_csv = "output/common_words/csv/"
-        # analyzer.directory_output_common_xls = "output/common_words/xls/"
-        # analyzer.directory_output_frequent_csv = "output/frequent_words/csv/"
-        # analyzer.directory_output_frequent_xls = "output/frequent_words/xls/"
-
-        exe_dir = os.path.dirname(os.path.abspath(__file__))
-
-        analyzer.directory_output = os.path.join(exe_dir, "output/")
-        analyzer.directory_output_common_csv = os.path.join(
-            exe_dir, "output/common_words/csv/")
-        analyzer.directory_output_common_xls = os.path.join(
-            exe_dir, "output/common_words/xls/")
-        analyzer.directory_output_frequent_csv = os.path.join(
-            exe_dir, "output/frequent_words/csv/")
-        analyzer.directory_output_frequent_xls = os.path.join(
-            exe_dir, "output/frequent_words/xls/")
+        analyzer.directory_output = "output/"
+        analyzer.directory_output_common_csv = "output/common_words/csv/"
+        analyzer.directory_output_common_xls = "output/common_words/xls/"
+        analyzer.directory_output_frequent_csv = "output/frequent_words/csv/"
+        analyzer.directory_output_frequent_xls = "output/frequent_words/xls/"
 
         folders = [
             analyzer.directory_output,
