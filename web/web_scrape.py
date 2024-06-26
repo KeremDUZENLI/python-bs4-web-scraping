@@ -1,8 +1,9 @@
-from web.web_tool import scrape_website_get_frequent_words
+from web.web_tool import create_unique_website_urls_list, scrape_website_get_frequent_words
 from web.web_translate import translate_top_words
 
 from input.websites import website_urls_example
 from tool.tool_excel import read_website_urls_from_excel
+from tool.tool_llist import read_websites_from_llist
 
 
 def create_frequent_words_from_example(class_instance):
@@ -16,7 +17,16 @@ def create_frequent_words_from_excel(class_instance):
     analyze_websites_translate_create_dict(class_instance)
 
 
+def create_frequent_words_from_llist(class_instance):
+    class_instance.all_websites_url = read_websites_from_llist(
+        class_instance.directory_input_llist)
+    analyze_websites_translate_create_dict(class_instance)
+
+
 def analyze_websites_translate_create_dict(class_instance):
+    class_instance.all_websites_url = create_unique_website_urls_list(
+        class_instance.all_websites_url)
+
     class_instance.all_websites_frequent_words_dict, class_instance.all_websites_status_dict = create_all_websites_frequent_words_dict(
         class_instance.all_websites_url, class_instance.top_frequency, class_instance.http_timeout)
 

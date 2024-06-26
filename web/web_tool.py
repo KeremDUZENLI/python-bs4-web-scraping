@@ -1,19 +1,6 @@
-import string
 import requests
-import nltk
-from nltk.corpus import stopwords
-from collections import Counter
-from bs4 import BeautifulSoup
-
-
-nltk.download('stopwords')
-nltk.download('punkt')
-
-
-STOP_WORDS_GERMAN = set(stopwords.words('german'))
-STOP_WORDS_ENGLISH = set(stopwords.words('english'))
-DELETE_TEXT = ["\"", "//", "'", "*", "\n", "\t", "–", "“", "„", "€", "$",
-               "xml version='1.0' encoding='utf-8'?", "html", ""] + list(string.punctuation)
+from urllib.parse import urlparse
+from web.web_tool_helper import clean_html_content, filter_text, get_top_words
 
 
 def scrape_website_get_frequent_words(website_url, top_frequency, http_timeout, all_websites_status_dict):
@@ -44,7 +31,7 @@ def scrape_website_get_html_content(website_url, http_timeout, all_websites_stat
         all_websites_status_dict[website_url] = {
             'status': 'reached',
             'time': response_time}
-        print(f"{website_url.ljust(30)} : {response_time:.2f} seconds")
+        print(f"{website_url.ljust(50)} : {response_time:.2f} seconds")
 
         return response.text
 
@@ -53,49 +40,25 @@ def scrape_website_get_html_content(website_url, http_timeout, all_websites_stat
         all_websites_status_dict[website_url] = {
             'status': 'unreached',
             'error': error_type}
-        print(f"{website_url.ljust(30)} : {error_type}")
+        print(f"{website_url.ljust(50)} : {error_type}")
 
         return None
 
 
-def clean_html_content(html_content):
-    if html_content is None:
-        return None
+def create_unique_website_urls_list(website_urls):
+    seen_domains = set()
+    unique_website_urls_list = []
 
-    soup = BeautifulSoup(html_content, 'html.parser')
-    website_text = soup.get_text()
+    for website_url in website_urls:
+        base_domain = extract_base_url(website_url)
+        if base_domain not in seen_domains:
+            seen_domains.add(base_domain)
+            unique_website_urls_list.append("https://" + base_domain)
 
-    for text in DELETE_TEXT:
-        website_text = website_text.replace(text, "")
-
-    return website_text
-
-
-def filter_text(website_text):
-    if website_text is None:
-        return None
-
-    stop_words = STOP_WORDS_GERMAN.union(STOP_WORDS_ENGLISH)
-
-    tokenized_words = nltk.word_tokenize(website_text)
-    filtered_words = [word.capitalize() for word in tokenized_words
-                      if word.lower() not in stop_words
-                      and not any(char.isdigit() for char in word)
-                      and 2 < len(word) < 30]
-
-    cleaned_words = [word.strip(string.punctuation) for word in filtered_words]
-    filtered_text = ' '.join(cleaned_words)
-
-    return filtered_text
+    return unique_website_urls_list
 
 
-def get_top_words(filtered_text, top_frequency):
-    if filtered_text is None:
-        return None
-
-    word_freq = Counter(filtered_text.split())
-    filtered_freq = {word: freq for word,
-                     freq in word_freq.items() if freq > 1}
-    top_words = Counter(filtered_freq).most_common(top_frequency)
-
-    return top_words
+def extract_base_url(website_url):
+    parsed_url = urlparse(website_url)
+    base_domain = parsed_url.netloc if parsed_url.netloc else parsed_url.path
+    return base_domain.replace('www.', '')

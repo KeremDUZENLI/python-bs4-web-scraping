@@ -4,9 +4,10 @@ from setup.env import setup_env, setup_output_directory
 
 from tool.tool_csv import create_all_websites_frequent_words_dict_to_csv, create_common_words_among_websites_dict_to_csv, save_websites_status_dict_as_csv
 from tool.tool_excel import create_all_websites_frequent_words_dict_to_excel, create_common_words_among_websites_dict_to_excel
+from tool.tool_llist import save_websites_clean_dict_as_llist
 from tool.tool_txt import save_frequent_words_dict_as_txt, read_frequent_words_from_txt
 
-from web.web_scrape import create_frequent_words_from_example, create_frequent_words_from_excel
+from web.web_scrape import create_frequent_words_from_example, create_frequent_words_from_excel, create_frequent_words_from_llist
 
 
 class WebsiteAnalyzer:
@@ -109,6 +110,7 @@ class Setup:
 
     def set_input_files(self, analyzer):
         analyzer.directory_input_excel = analyzer.directory_input + "websites.xlsx"
+        analyzer.directory_input_llist = analyzer.directory_input + "websites.list"
 
     def set_output_folders(self, analyzer):
         analyzer.directory_output = "output/"
@@ -135,8 +137,12 @@ class Setup:
             "all_websites_frequent_words_dict_translated_de.txt"
         analyzer.all_websites_frequent_words_dict_translated_txt_en = analyzer.directory_output + \
             "all_websites_frequent_words_dict_translated_en.txt"
+
         analyzer.all_websites_status_dict_csv = analyzer.directory_output + \
             "all_websites_status.csv"
+
+        analyzer.all_websites_clean_dict_llist = analyzer.directory_output + \
+            "all_websites_clean.list"
 
         analyzer.common_words_among_websites_dict_csv = analyzer.directory_output_common_csv + \
             "common_words_among_websites_dict.csv"
@@ -180,8 +186,10 @@ class Setup:
 
             "READ_WEBSITES": create_frequent_words_from_example,
             "READ_EXCEL": create_frequent_words_from_excel,
+            "READ_LLIST": create_frequent_words_from_llist,
         }
 
         runs_types.get(analyzer.run_type)(analyzer)
         save_frequent_words_dict_as_txt(analyzer)
         save_websites_status_dict_as_csv(analyzer)
+        save_websites_clean_dict_as_llist(analyzer)

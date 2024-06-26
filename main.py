@@ -24,7 +24,8 @@ run_type = {0: None,
             2: "MOCK_FREQUENCY",
             3: "READ_TXT",
             4: "READ_WEBSITES",
-            5: "READ_EXCEL"}
+            5: "READ_EXCEL",
+            6: "READ_LLIST"}
 
 top_frequency = 5
 
@@ -38,7 +39,7 @@ def main():
         language[0],
 
         xls_type[1],
-        run_type[4],
+        run_type[6],
 
         top_frequency,
         http_timeout
